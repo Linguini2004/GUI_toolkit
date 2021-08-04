@@ -2,6 +2,7 @@
 # This is a simple button which initiates a response when clicked
 # Eventually you will be able to modify all aspects of the button such as image and texture
 import pygame
+from pygame import *
 
 class Button:
     def __init__(self):
@@ -14,11 +15,13 @@ class Button:
         self.pos_hint = ""
         self.font = "Rockwell"
         self.font_size = 20
+        self.rounded = True
+        self.radius = 0.1
 
         self._type = "button"
         self._hover = False
         self._pressed = False
-        self._pressed_timeout = 100
+        self._pressed_timeout = 20
         self._dimensions = [0, 0]
         self._position = [0, 0]
         self._action = None
@@ -61,16 +64,47 @@ class Button:
             self._pressed_timeout -= 1
             if self._pressed_timeout <= 0:
                 self._pressed = False
-                self._pressed_timeout = 100
+                self._pressed_timeout = 20
         elif self._hover:
             draw_colour = self.hover_colour
         else:
             draw_colour = self.colour
+        if not self.rounded:
+            pygame.draw.rect(surface,
+                             draw_colour,
+                             [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]],
+                             5,
+                             5
+                             )
+        else:
+            radius = self.radius
+            rect = Rect((self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]))
+            color = Color(*draw_colour)
+            alpha = color.a
+            color.a = 0
+            pos = rect.topleft
+            rect.topleft = 0, 0
+            rectangle = Surface(rect.size, SRCALPHA)
 
-        pygame.draw.rect(surface,
-                         draw_colour,
-                         [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]]
-                         )
+            circle = Surface([min(rect.size) * 3] * 2, SRCALPHA)
+            draw.ellipse(circle, (0, 0, 0), circle.get_rect(), 0)
+            circle = transform.smoothscale(circle, [int(min(rect.size) * radius)] * 2)
+
+            radius = rectangle.blit(circle, (0, 0))
+            radius.bottomright = rect.bottomright
+            rectangle.blit(circle, radius)
+            radius.topright = rect.topright
+            rectangle.blit(circle, radius)
+            radius.bottomleft = rect.bottomleft
+            rectangle.blit(circle, radius)
+
+            rectangle.fill((0, 0, 0), rect.inflate(-radius.w, 0))
+            rectangle.fill((0, 0, 0), rect.inflate(0, -radius.h))
+
+            rectangle.fill(color, special_flags=BLEND_RGBA_MAX)
+            rectangle.fill((255, 255, 255, alpha), special_flags=BLEND_RGBA_MIN)
+
+            surface.blit(rectangle, pos)
 
         if self.text != "":
             font = pygame.font.SysFont(self.font, self.font_size)
