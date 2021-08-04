@@ -21,6 +21,7 @@ class Button:
         self._pressed_timeout = 100
         self._dimensions = [0, 0]
         self._position = [0, 0]
+        self._action = None
 
     def assign_dimensions(self, dimensions):
         """The provided size_hint is only advisory as certain layouts may manipulate dimensions in different ways
@@ -77,3 +78,12 @@ class Button:
             x_coord = self._position[0] + (self._dimensions[0] / 2 - b_text.get_width() / 2)
             y_coord = self._position[1] + (self._dimensions[1] / 2 - b_text.get_height() / 2)
             surface.blit(b_text, (x_coord, y_coord))
+
+    def bind(self, Application, method):
+        self._action = getattr(Application, method)
+
+    def action(self):
+        if self._action is not None:
+            self._action(self)
+        else:
+            print("NoActionBound")

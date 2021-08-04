@@ -34,5 +34,7 @@ class App:
                 if event.type == MOUSEBUTTONDOWN:
                     for widget in widgets:
                         if widget._type == "button":
-                            widget.mouse_click(pygame.mouse.get_pos())
+                            if widget.mouse_click(pygame.mouse.get_pos()):
+                                widget.action()
+
 

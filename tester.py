@@ -13,6 +13,7 @@ class Example(App):
         button1.text = "hello"
         button1.colour = (100, 100, 100)
         button1.pressed_colour = (0, 255, 0)
+        button1.bind(self, "test_button")
         main_layout.add_widget(button1)
 
         button2 = Button()
@@ -28,6 +29,10 @@ class Example(App):
         main_layout.add_widget(button3)
 
         return main_layout
+
+    def test_button(self, instance):
+        print("Button 1 has been pressed")
+        print(instance.text)
 
 if __name__ == "__main__":
     application = Example()
