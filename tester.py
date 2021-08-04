@@ -4,11 +4,14 @@ from Layouts.Box_Layout import BoxLayout
 
 class Example(App):
     def build(self):
+        self.screen_width = 400
+        self.screen_height = 600
+
         main_layout = BoxLayout()
         main_layout.background_colour = (255, 255, 255)
         main_layout.widget_border = 10
         main_layout.mode = "horizontal"
-        main_layout.padding = [460, 0, 0, 0]
+        main_layout.padding = [0, 0, 0, 0]
 
         button1 = Button()
         button1.text = "B1"

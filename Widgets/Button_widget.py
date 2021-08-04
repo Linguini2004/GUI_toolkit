@@ -7,7 +7,7 @@ from pygame import *
 class Button:
     def __init__(self):
         self.colour = (50, 50, 50)
-        self.hover_colour = (50, 50, 50)
+        self.hover_colour = (100, 100, 100)
         self.pressed_colour = (50, 50, 50)
         self.text = ""
         self.text_colour = (255, 255, 255)
