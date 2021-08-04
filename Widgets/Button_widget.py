@@ -15,7 +15,7 @@ class Button:
         self.pos_hint = ""
         self.font = "Rockwell"
         self.font_size = 20
-        self.rounded = True
+        self.rounded = False
         self.radius = 0.1
 
         self._type = "button"
@@ -69,12 +69,11 @@ class Button:
             draw_colour = self.hover_colour
         else:
             draw_colour = self.colour
+
         if not self.rounded:
             pygame.draw.rect(surface,
                              draw_colour,
-                             [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]],
-                             5,
-                             5
+                             [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]]
                              )
         else:
             radius = self.radius
