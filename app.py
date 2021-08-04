@@ -21,11 +21,14 @@ class App:
 
     def _get_widgets(self, main_layout):
         widgets = []
-        print(main_layout)
-        print(type(main_layout) == list)
         if type(main_layout) == list:
             for layout in main_layout:
                 widgets += layout.provide_widgets()
+
+        elif type(main_layout) == dict:
+            for layout in main_layout:
+                widgets += layout.provide_widgets()
+
         else:
             widgets = main_layout.provide_widgets()
 
@@ -35,6 +38,11 @@ class App:
         if type(main_layout) == list:
             for layout in main_layout:
                 layout.draw_background(self._screen)
+
+        elif type(main_layout) == dict:
+            for layout in main_layout:
+                layout.draw_background(self._screen)
+
         else:
             main_layout.draw_background(self._screen)
 
@@ -46,6 +54,17 @@ class App:
                 layout.draw_background(self._screen)
                 layout.assign_dimensions((layout_width, layout_height))
                 layout.assign_position((0, i * layout_height))
+
+        elif type(main_layout) == dict:
+            layout_width = self.screen_width
+            layout_heights = []
+            for size in main_layout.values():
+                layout_heights.append(size * self.screen_height)
+
+            for i, (layout, size) in enumerate(main_layout.items()):
+                layout.draw_background(self._screen)
+                layout.assign_dimensions((layout_width, layout_heights[i]))
+                layout.assign_position((0, sum(layout_heights[:i])))
         else:
             main_layout.assign_dimensions((self.screen_width, self.screen_height))
             main_layout.assign_position((0, 0))

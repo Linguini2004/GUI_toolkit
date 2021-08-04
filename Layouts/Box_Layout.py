@@ -8,7 +8,7 @@ class BoxLayout:
         self.mode = "horizontal"
         self.background_colour = (0, 0, 0)
         self.widget_border = 10
-        self.padding = [10, 10, 0, 0]
+        self.padding = [0, 0, 0, 0]
         # padding = [header, footer, left_margin, right_margin]
 
         self._widgets = []
@@ -29,7 +29,7 @@ class BoxLayout:
         self._dimensions = dimensions
         self._layout_width = self._dimensions[0]
         self._layout_height = self._dimensions[1]
-
+        print("height", self._layout_height)
 
     def assign_position(self, position):
         """With the option of having multiple layouts on one screen, it must be the app.py
@@ -37,6 +37,7 @@ class BoxLayout:
         itself is unaware of other layouts"""
 
         self._position = position
+        print("coords", position)
         self._align()
         self._update_widgets()
 
@@ -50,24 +51,25 @@ class BoxLayout:
         self._layout_height -= (self.padding[0] + self.padding[1])
         print(self._position)
 
-        if self.mode == "horizontal":
-            self._widget_width = (self._layout_width - (self.widget_border * (self._num_widgets + 1))) / self._num_widgets
-            self._widget_height = self._layout_height - (self.widget_border * 2)
+        if self._num_widgets > 0:
+            if self.mode == "horizontal":
+                self._widget_width = (self._layout_width - (self.widget_border * (self._num_widgets + 1))) / self._num_widgets
+                self._widget_height = self._layout_height - (self.widget_border * 2)
 
-            for i in range(len(self._widgets)):
-                x_coord = (self.padding[2] + (self.widget_border * (i + 1)) + (i * self._widget_width)) + self._position[0]
-                y_coord = (self.padding[0] + self.widget_border) + self._position[1]
-                print("coords", (x_coord, y_coord))
-                self._widget_coords.append((x_coord, y_coord))
+                for i in range(len(self._widgets)):
+                    x_coord = (self.padding[2] + (self.widget_border * (i + 1)) + (i * self._widget_width)) + self._position[0]
+                    y_coord = (self.padding[0] + self.widget_border) + self._position[1]
 
-        elif self.mode == "vertical":
-            self._widget_width = self._layout_width - (self.widget_border * 2)
-            self._widget_height = (self._layout_height - (self.widget_border * (self._num_widgets + 1))) / self._num_widgets
+                    self._widget_coords.append((x_coord, y_coord))
 
-            for i in range(len(self._widgets)):
-                x_coord = (self.padding[2] + self.widget_border) + self._position[0]
-                y_coord = (self.padding[0] + (self.widget_border * (i + 1)) + (i * self._widget_height)) + self._position[1]
-                self._widget_coords.append((x_coord, y_coord))
+            elif self.mode == "vertical":
+                self._widget_width = self._layout_width - (self.widget_border * 2)
+                self._widget_height = (self._layout_height - (self.widget_border * (self._num_widgets + 1))) / self._num_widgets
+
+                for i in range(len(self._widgets)):
+                    x_coord = (self.padding[2] + self.widget_border) + self._position[0]
+                    y_coord = (self.padding[0] + (self.widget_border * (i + 1)) + (i * self._widget_height)) + self._position[1]
+                    self._widget_coords.append((x_coord, y_coord))
 
     def _update_widgets(self):
         for i, widget in enumerate(self._widgets):
@@ -75,7 +77,7 @@ class BoxLayout:
             widget.assign_dimensions((self._widget_width, self._widget_height))
 
     def draw_background(self, surface):
-        pygame.draw.rect(surface, self.background_colour, [0, 0, self._dimensions[0], self._dimensions[1]])
+        pygame.draw.rect(surface, self.background_colour, [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]])
 
     def provide_widgets(self):
         return self._widgets
