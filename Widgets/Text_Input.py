@@ -23,7 +23,8 @@ class Text_Input:
         # align must be 0, 1, 2 or 3
         self.rounded = False
         self.radius = 0.1
-        self.header = ""
+        self.header_active = True
+        self.header_text = ""
         self.header_align = "top"
 
         self._active = False
@@ -74,7 +75,10 @@ class Text_Input:
             else:
                 self.text += event.unicode
 
-    def _draw_background(self, surface):
+    def _draw_header(self, surface, font, color):
+        surface.blit(font.render(self.header_text, True, color), ((self._position[0]) + self.padding[2], self._position[1] + self.padding[0]))
+
+    def _draw_background(self, surface, modified_pos, modified_dim):
         if self._active:
             draw_colour = self.active_colour
         elif self._hover:
@@ -84,43 +88,63 @@ class Text_Input:
 
         if not self.rounded:
             pygame.draw.rect(surface, self.border_colour,
-                             [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]])
+                             [modified_pos[0], modified_pos[1], modified_dim[0], modified_dim[1]])
 
             pygame.draw.rect(surface, draw_colour,
-                             [self._position[0] + self.border_thickness,
-                              self._position[1] + self.border_thickness,
-                              self._dimensions[0] - (self.border_thickness * 2),
-                              self._dimensions[1] - (self.border_thickness * 2)])
+                             [modified_pos[0] + self.border_thickness,
+                              modified_pos[1] + self.border_thickness,
+                              modified_dim[0] - (self.border_thickness * 2),
+                              modified_dim[1] - (self.border_thickness * 2)])
         else:
-            curved_border, pos = curve_shape(self.radius, [self._position[0], self._position[1], self._dimensions[0],
-                                                           self._dimensions[1]],
+            curved_border, pos = curve_shape(self.radius, [modified_pos[0], modified_pos[1], modified_dim[0],
+                                                           modified_dim[1]],
                                              self.border_colour)
             surface.blit(curved_border, pos)
 
             curved_box, pos = curve_shape(self.radius,
-                                          [self._position[0] + self.border_thickness,
-                                           self._position[1] + self.border_thickness,
-                                           self._dimensions[0] - (self.border_thickness * 2),
-                                           self._dimensions[1] - (self.border_thickness * 2)],
+                                          [modified_pos[0] + self.border_thickness,
+                                           modified_pos[1] + self.border_thickness,
+                                           modified_dim[0] - (self.border_thickness * 2),
+                                           modified_dim[1] - (self.border_thickness * 2)],
                                           draw_colour
                                           )
 
             surface.blit(curved_box, pos)
 
     def draw(self, surface, pos):
-        self._mouse_over(pos)
-        self._draw_background(surface)
+            self._mouse_over(pos)
+            padding = self.padding
+            
+            box_position = list(self._position)
+            box_dimensions = list(self._dimensions)
 
-        padding = self.padding
+            font = pygame.font.SysFont(self.font, self.font_size)
+            text = self.text
+            color = self.text_colour
+            align = self.align
 
-        text = self.text
-        color = self.text_colour
-        rect = [self._position[0] + self.border_thickness + padding[2],
-                self._position[1] + self.border_thickness + padding[0],
-                self._dimensions[0] - (self.border_thickness * 2) - (padding[3] + padding[2]),
-                self._dimensions[1] - (self.border_thickness * 2) - (padding[1] + padding[0])]
+            if self.header_active:
+                if self.header_align == "top":
+                    box_position[1] += font.render("H", False, color).get_height() + 10
+                    box_dimensions[1] -= font.render("H", False, color).get_height() + 10
+                elif self.header_align == "left":
+                    box_position[0] += (font.render(self.header_text, False, color).get_width() + 10)
+                    box_dimensions[0] -= (font.render(self.header_text, False, color).get_width() + 10)
 
-        font = pygame.font.SysFont(self.font, self.font_size)
-        align = self.align
+                self._draw_header(surface, font, color)
+            
+            # passing through the modified params as to not modify the widgets own position and dimensions
+            self._draw_background(surface, box_position, box_dimensions)
+            
+            rect = [box_position[0] + self.border_thickness + padding[2],
+                    box_position[1] + self.border_thickness + padding[0],
+                    box_dimensions[0] - (self.border_thickness * 2) - (padding[3] + padding[2]),
+                    box_dimensions[1] - (self.border_thickness * 2) - (padding[1] + padding[0])]
 
-        wrap_text(surface, text, color, rect, font, align)
+
+            wrap_text(surface, text, color, rect, font, align)
+
+
+
+
+
