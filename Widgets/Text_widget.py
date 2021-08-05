@@ -1,6 +1,7 @@
 # This is one of the widgets
 # This widget simply blits text onto the screen
 import pygame
+from Resources.Wrap_text import wrap_text
 from pygame import *
 
 class Text:
@@ -28,18 +29,16 @@ class Text:
 
         self._position = position
 
-    def draw(self, surface, pos, aa=True, bkg=None):
-        textAlignLeft = 0
-        textAlignRight = 1
-        textAlignCenter = 2
-        textAlignBlock = 3
-
+    def draw(self, surface, pos):
         text = self.text
         color = self.text_colour
         rect = [self._position[0], self._position[1], self._dimensions[0], self._position[1]]
         font = pygame.font.SysFont(self.font, self.font_size)
         align = self.align
 
+        wrap_text(surface, text, color, rect, font, align)
+
+        '''
         lineSpacing = -2
         spaceWidth, fontHeight = font.size(" ")[0], font.size("Tg")[1]
 
@@ -86,6 +85,7 @@ class Text:
             for text in listOfWords[drawWords:]: remainingText += text + " "
             return remainingText
         return ""
-
+    
+        '''
 
 

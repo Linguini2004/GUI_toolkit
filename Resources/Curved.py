@@ -1,7 +1,6 @@
 import pygame
 from pygame import *
 
-
 def curve_shape(radius, rect_dimensions, draw_color):
     color = Color(*draw_color)
     alpha = color.a
