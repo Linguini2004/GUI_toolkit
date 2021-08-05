@@ -1,11 +1,8 @@
 # The purpose of this program is to act as a foundation for the application
 # This involves drawing everything to the screen and housing the event loop
 # It does not house any classes and does not handle the logic behind objects (which are to be dealt with by the object's methods)
-import inspect
 import pygame
 from pygame.locals import *
-import numpy
-
 
 # noinspection PyAttributeOutsideInit
 class App:

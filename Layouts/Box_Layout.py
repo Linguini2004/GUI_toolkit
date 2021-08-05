@@ -29,7 +29,6 @@ class BoxLayout:
         self._dimensions = dimensions
         self._layout_width = self._dimensions[0]
         self._layout_height = self._dimensions[1]
-        print("height", self._layout_height)
 
     def assign_position(self, position):
         """With the option of having multiple layouts on one screen, it must be the app.py
@@ -37,7 +36,6 @@ class BoxLayout:
         itself is unaware of other layouts"""
 
         self._position = position
-        print("coords", position)
         self._align()
         self._update_widgets()
 
@@ -49,7 +47,6 @@ class BoxLayout:
         self._widget_coords = []
         self._layout_width -= (self.padding[2] + self.padding[3])
         self._layout_height -= (self.padding[0] + self.padding[1])
-        print(self._position)
 
         if self._num_widgets > 0:
             if self.mode == "horizontal":
