@@ -29,6 +29,7 @@ class BoxLayout:
         self._dimensions = dimensions
         self._layout_width = self._dimensions[0]
         self._layout_height = self._dimensions[1]
+        print("width, height", self._dimensions[0], self._dimensions[1])
 
     def assign_position(self, position):
         """With the option of having multiple layouts on one screen, it must be the app.py
@@ -38,6 +39,7 @@ class BoxLayout:
         self._position = position
         self._align()
         self._update_widgets()
+        print("x, y", self._position[0], self._position[1])
 
     def add_widget(self, widget: object):
         self._widgets.append(widget)
@@ -74,7 +76,9 @@ class BoxLayout:
             widget.assign_dimensions((self._widget_width, self._widget_height))
 
     def draw_background(self, surface):
+        # print(self.background_colour)
         pygame.draw.rect(surface, self.background_colour, [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]])
+        print([self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]])
 
     def provide_widgets(self):
         return self._widgets
