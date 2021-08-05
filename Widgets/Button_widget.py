@@ -2,6 +2,7 @@
 # This is a simple button which initiates a response when clicked
 # Eventually you will be able to modify all aspects of the button such as image and texture
 import pygame
+from Resources.Curved import curve_shape
 from pygame import *
 
 class Button:
@@ -76,34 +77,8 @@ class Button:
                              [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]]
                              )
         else:
-            radius = self.radius
-            rect = Rect((self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]))
-            color = Color(*draw_colour)
-            alpha = color.a
-            color.a = 0
-            pos = rect.topleft
-            rect.topleft = 0, 0
-            rectangle = Surface(rect.size, SRCALPHA)
-
-            circle = Surface([min(rect.size) * 3] * 2, SRCALPHA)
-            draw.ellipse(circle, (0, 0, 0), circle.get_rect(), 0)
-            circle = transform.smoothscale(circle, [int(min(rect.size) * radius)] * 2)
-
-            radius = rectangle.blit(circle, (0, 0))
-            radius.bottomright = rect.bottomright
-            rectangle.blit(circle, radius)
-            radius.topright = rect.topright
-            rectangle.blit(circle, radius)
-            radius.bottomleft = rect.bottomleft
-            rectangle.blit(circle, radius)
-
-            rectangle.fill((0, 0, 0), rect.inflate(-radius.w, 0))
-            rectangle.fill((0, 0, 0), rect.inflate(0, -radius.h))
-
-            rectangle.fill(color, special_flags=BLEND_RGBA_MAX)
-            rectangle.fill((255, 255, 255, alpha), special_flags=BLEND_RGBA_MIN)
-
-            surface.blit(rectangle, pos)
+            curved_rectangle, pos = curve_shape(self.radius, (self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]), draw_colour)
+            surface.blit(curved_rectangle, pos)
 
         if self.text != "":
             font = pygame.font.SysFont(self.font, self.font_size)

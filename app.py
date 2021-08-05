@@ -10,6 +10,7 @@ class App:
         self._running = False
         self.screen_width = 400
         self.screen_height = 600
+        self.title = "GUI"
 
         self._screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
@@ -68,6 +69,7 @@ class App:
 
     def run(self):
         pygame.init()
+        pygame.display.set_caption(self.title)
         self._running = True
         main_layout = self.build()
         widgets = self._get_widgets(main_layout)
@@ -75,7 +77,6 @@ class App:
 
         while self._running:
             self._draw_backgrounds(main_layout)
-
 
             for widget in widgets:
                 widget.draw(self._screen, pygame.mouse.get_pos())
@@ -85,6 +86,13 @@ class App:
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN:
                     for widget in widgets:
-                        if widget._type == "button":
+                        if widget._type in ["button", "text_input"]:
                             if widget.mouse_click(pygame.mouse.get_pos()):
-                                widget.action()
+                                try:
+                                    widget.action()
+                                except AttributeError:
+                                    pass
+                if event.type == KEYDOWN:
+                    for widget in widgets:
+                        if widget._type == "text_input":
+                            widget._update(event)
