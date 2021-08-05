@@ -12,8 +12,6 @@ class App:
         self.screen_height = 600
         self.title = "GUI"
 
-        self._screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-
     def build(self):
         return None
 
@@ -69,6 +67,7 @@ class App:
 
     def run(self):
         pygame.init()
+        self._screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         pygame.display.set_caption(self.title)
         self._running = True
         main_layout = self.build()
@@ -95,4 +94,4 @@ class App:
                 if event.type == KEYDOWN:
                     for widget in widgets:
                         if widget._type == "text_input":
-                            widget._update(event)
+                            widget.update(event)

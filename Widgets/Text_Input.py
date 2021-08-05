@@ -26,6 +26,8 @@ class Text_Input:
         self.header_active = True
         self.header_text = ""
         self.header_align = "top"
+        self.default_text = ""
+        self.default_text_colour = (150, 150, 150)
 
         self._active = False
         self._type = "text"
@@ -66,7 +68,7 @@ class Text_Input:
             self._active = False
             return False
 
-    def _update(self, event):
+    def update(self, event):
         if self._active:
             if event.key == K_BACKSPACE:
                 self.text = self.text.rstrip(self.text[-1])
@@ -77,6 +79,9 @@ class Text_Input:
 
     def _draw_header(self, surface, font, color):
         surface.blit(font.render(self.header_text, True, color), ((self._position[0]) + self.padding[2], self._position[1] + self.padding[0]))
+
+    def _draw_default_text(self, surface, text, color, rect, font, align):
+        wrap_text(surface, text, color, rect, font, align)
 
     def _draw_background(self, surface, modified_pos, modified_dim):
         if self._active:
@@ -141,6 +146,8 @@ class Text_Input:
                     box_dimensions[0] - (self.border_thickness * 2) - (padding[3] + padding[2]),
                     box_dimensions[1] - (self.border_thickness * 2) - (padding[1] + padding[0])]
 
+            if self.default_text != "" and self.text == "":
+                self._draw_default_text(surface, self.default_text, self.default_text_colour, rect, font, align)
 
             wrap_text(surface, text, color, rect, font, align)
 

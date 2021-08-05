@@ -31,6 +31,8 @@ class Example(App):
         test_text.header_active = True
         test_text.header_text = "Type Here:"
         test_text.header_align = "top"
+        test_text.default_text = "Type here"
+        test_text.default_text_colour = (255, 255, 255)
         top_layout.add_widget(test_text)
 
         middle_layout = BoxLayout()

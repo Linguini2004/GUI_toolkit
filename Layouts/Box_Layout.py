@@ -20,7 +20,7 @@ class BoxLayout:
         self._position = [0, 0]
         self._layout_width = 0
         self._layout_height = 0
-        
+
     def assign_dimensions(self, dimensions):
         """With the option of having multiple layouts on one screen, it must be the app.py 
         program that assigns the dimensions of the layout as the layout itself is unaware of
