@@ -17,11 +17,19 @@ class App:
 
     def _get_widgets(self, main_layout):
         widgets = []
+        print(main_layout[0])
         if type(main_layout) == list:
             if type(main_layout[0]) == list:
-                for column in main_layout:
-                    for layout in column:
-                        widgets += layout.provide_widgets()
+                if type(main_layout[0][0]) == list:
+                    for column in main_layout:
+                        for layout in column:
+                            widgets += layout.provide_widgets()
+
+                elif type(main_layout[0][0]) == dict:
+                    for column in main_layout:
+                        for layout in column[0].keys():
+                            widgets += layout.provide_widgets()
+
             elif type(main_layout[0]) == dict:
                 for column in main_layout:
                     for layout in column.keys():
@@ -42,9 +50,15 @@ class App:
     def _draw_backgrounds(self, main_layout):
         if type(main_layout) == list:
             if type(main_layout[0]) == list:
-                for column in main_layout:
-                    for layout in column:
-                        layout.draw_background(self._screen)
+                if type(main_layout[0][0]) == list:
+                    for column in main_layout:
+                        for layout in column:
+                            layout.draw_background(self._screen)
+
+                elif type(main_layout[0][0]) == dict:
+                    for column in main_layout:
+                        for layout in column[0].keys():
+                            layout.draw_background(self._screen)
 
             elif type(main_layout[0]) == dict:
                 for column in main_layout:
@@ -65,29 +79,38 @@ class App:
     def _assign_layout_params(self, main_layout):
         if type(main_layout) == list:
             height_list = []
+            width_list = []
             if type(main_layout[0]) == list:
-                layout_width = self.screen_width / len(main_layout)
-                for column in main_layout:
-                    height_list.append(self.screen_height / len(column))
-                for i, column in enumerate(main_layout):
-                    for n, layout in enumerate(column):
-                        layout.draw_background(self._screen)
-                        layout.assign_dimensions((layout_width, height_list[i]))
-                        layout.assign_position((i * layout_width, n * height_list[i]))
+                if type(main_layout[0][0]) == list:
+                    layout_width = self.screen_width / len(main_layout)
+                    for column in main_layout:
+                        height_list.append(self.screen_height / len(column))
+                    for i, column in enumerate(main_layout):
+                        for n, layout in enumerate(column):
+                            layout.draw_background(self._screen)
+                            layout.assign_dimensions((layout_width, height_list[i]))
+                            layout.assign_position((i * layout_width, n * height_list[i]))
+                elif type(main_layout[0][0]) == dict:
+                    for i, column in enumerate(main_layout):
+                        width_list.append(column[1] * self.screen_width)
+                        height_list.append([])
+                        for layout_height in column[0].values():
+                            height_list[i].append(self.screen_height * layout_height)
+                    for i, column in enumerate(main_layout):
+                        for n, layout in enumerate(column[0].keys()):
+                            layout.draw_background(self._screen)
+                            layout.assign_dimensions((width_list[i], height_list[i][n]))
+                            layout.assign_position((sum(width_list[:i]), n * sum(height_list[i][:n])))
 
             elif type(main_layout[0]) == dict:
                 layout_width = self.screen_width / len(main_layout)
                 for i, column in enumerate(main_layout):
                     height_list.append([])
-                    print(height_list)
                     for layout_height in column.values():
                         height_list[i].append(self.screen_height * layout_height)
                 for i, column in enumerate(main_layout):
                     for n, layout in enumerate(column.keys()):
                         layout.draw_background(self._screen)
-                        #print("position", (i * layout_width, n * sum(height_list[i][:n])))
-                        print(height_list)
-                        print(n, sum(height_list[i][:n]))
                         layout.assign_dimensions((layout_width, height_list[i][n]))
                         layout.assign_position((i * layout_width, n * sum(height_list[i][:n])))
 
