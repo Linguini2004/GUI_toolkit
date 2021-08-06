@@ -32,7 +32,6 @@ class Text_Input:
 
         self._active = False
         self._act_padding = [0, 0, 0, 0]
-        self._type = "text"
         self._dimensions = [0, 0]
         self._position = [0, 0]
         self._hover = False
