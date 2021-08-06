@@ -8,7 +8,7 @@ from pygame.locals import *
 class App:
     def __init__(self):
         self._running = False
-        self.screen_width = 1200
+        self.screen_width = 400
         self.screen_height = 600
         self.title = "GUI"
 
@@ -21,6 +21,10 @@ class App:
             if type(main_layout[0]) == list:
                 for column in main_layout:
                     for layout in column:
+                        widgets += layout.provide_widgets()
+            elif type(main_layout[0]) == dict:
+                for column in main_layout:
+                    for layout in column.keys():
                         widgets += layout.provide_widgets()
             else:
                 for layout in main_layout:
@@ -41,6 +45,12 @@ class App:
                 for column in main_layout:
                     for layout in column:
                         layout.draw_background(self._screen)
+
+            elif type(main_layout[0]) == dict:
+                for column in main_layout:
+                    for layout in column.keys():
+                        layout.draw_background(self._screen)
+
             else:
                 for layout in main_layout:
                     layout.draw_background(self._screen)
@@ -64,6 +74,22 @@ class App:
                         layout.draw_background(self._screen)
                         layout.assign_dimensions((layout_width, height_list[i]))
                         layout.assign_position((i * layout_width, n * height_list[i]))
+
+            elif type(main_layout[0]) == dict:
+                layout_width = self.screen_width / len(main_layout)
+                for i, column in enumerate(main_layout):
+                    height_list.append([])
+                    print(height_list)
+                    for layout_height in column.values():
+                        height_list[i].append(self.screen_height * layout_height)
+                for i, column in enumerate(main_layout):
+                    for n, layout in enumerate(column.keys()):
+                        layout.draw_background(self._screen)
+                        #print("position", (i * layout_width, n * sum(height_list[i][:n])))
+                        print(height_list)
+                        print(n, sum(height_list[i][:n]))
+                        layout.assign_dimensions((layout_width, height_list[i][n]))
+                        layout.assign_position((i * layout_width, n * sum(height_list[i][:n])))
 
             else:
                 layout_width = self.screen_width
