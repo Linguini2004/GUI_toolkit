@@ -3,6 +3,7 @@
 import pygame
 from Resources.Curved import curve_shape
 from Resources.Wrap_text import wrap_text
+from Resources.Errors import PaddingError
 from pygame import *
 
 
@@ -14,7 +15,7 @@ class Text_Input:
         self.font_size = 20
         self.align = 0
         self.border_thickness = 0
-        self.padding = [5, 5, 5, 5]
+        self.padding = [0, 0, 0, 0]
         # header, footer, margin_left, margin_right
         self.border_colour = (50, 50, 50)
         self.background_colour = (100, 100, 100)
@@ -30,6 +31,7 @@ class Text_Input:
         self.default_text_colour = (150, 150, 150)
 
         self._active = False
+        self._act_padding = [0, 0, 0, 0]
         self._type = "text"
         self._dimensions = [0, 0]
         self._position = [0, 0]
@@ -41,6 +43,15 @@ class Text_Input:
         Therefore the dimensions are set by the layout object itself rather than the user or widget"""
 
         self._dimensions = dimensions
+
+        for pad in self.padding:
+            if pad > 1:
+                raise PaddingError("Padding can not be more than 100% of total size")
+
+        self._act_padding[0] = self.padding[0] * self._dimensions[1]
+        self._act_padding[1] = self.padding[1] * self._dimensions[1]
+        self._act_padding[2] = self.padding[2] * self._dimensions[0]
+        self._act_padding[3] = self.padding[3] * self._dimensions[0]
 
     def assign_position(self, position):
         """The provided pos_hint is only advisory as certain layouts may align and place widgets in different ways
@@ -78,7 +89,7 @@ class Text_Input:
                 self.text += event.unicode
 
     def _draw_header(self, surface, font, color):
-        surface.blit(font.render(self.header_text, True, color), ((self._position[0]) + self.padding[2], self._position[1] + self.padding[0]))
+        surface.blit(font.render(self.header_text, True, color), ((self._position[0]), self._position[1]))
 
     def _draw_default_text(self, surface, text, color, rect, font, align):
         wrap_text(surface, text, color, rect, font, align)
@@ -101,6 +112,7 @@ class Text_Input:
                               modified_dim[0] - (self.border_thickness * 2),
                               modified_dim[1] - (self.border_thickness * 2)])
         else:
+
             curved_border, pos = curve_shape(self.radius, [modified_pos[0], modified_pos[1], modified_dim[0],
                                                            modified_dim[1]],
                                              self.border_colour)
@@ -118,7 +130,7 @@ class Text_Input:
 
     def draw(self, surface, pos):
             self._mouse_over(pos)
-            padding = self.padding
+            padding = self._act_padding
             
             box_position = list(self._position)
             box_dimensions = list(self._dimensions)

@@ -6,7 +6,7 @@ from Layouts.Box_Layout import BoxLayout
 
 class Example(App):
     def build(self):
-        self.screen_width = 900
+        self.screen_width = 1200
         self.screen_height = 600
         self.font = "arial"
 
@@ -31,7 +31,7 @@ class Example(App):
 
         right_layout = BoxLayout()
         right_layout.background_colour = (200, 200, 200)
-        right_layout.padding = [100, 100, 66, 66]
+        right_layout.padding = [0.2, 0.2, 0.1, 0.1]
         right_column.append(right_layout)
 
         main_layout.append(left_column)
@@ -53,6 +53,7 @@ class Example(App):
             test_text2.background_colour = (175, 175, 175)
             test_text2.hover_colour = (150, 150, 150)
             test_text2.active_colour = (125, 125, 125)
+            test_text2.padding = [0.2, 0.2, 0, 0]
             test_text2.font = self.font
             test_text2.rounded = True
             test_text2.radius = 0.075

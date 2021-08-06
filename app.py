@@ -8,7 +8,7 @@ from pygame.locals import *
 class App:
     def __init__(self):
         self._running = False
-        self.screen_width = 900
+        self.screen_width = 1200
         self.screen_height = 600
         self.title = "GUI"
 
@@ -64,6 +64,7 @@ class App:
                         layout.draw_background(self._screen)
                         layout.assign_dimensions((layout_width, height_list[i]))
                         layout.assign_position((i * layout_width, n * height_list[i]))
+
             else:
                 layout_width = self.screen_width
                 layout_height = self.screen_height / len(main_layout)
@@ -80,11 +81,14 @@ class App:
 
             for i, (layout, size) in enumerate(main_layout.items()):
                 layout.draw_background(self._screen)
+                print("width", "height", layout_width, layout_heights[i])
                 layout.assign_dimensions((layout_width, layout_heights[i]))
                 layout.assign_position((0, sum(layout_heights[:i])))
         else:
+
             main_layout.assign_dimensions((self.screen_width, self.screen_height))
             main_layout.assign_position((0, 0))
+
 
     def run(self):
         pygame.init()

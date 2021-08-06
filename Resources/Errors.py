@@ -1,0 +1,3 @@
+class PaddingError(ValueError):
+    pass
+
