@@ -14,7 +14,7 @@ class Example(App):
         main_layout = {}
         top_layout = BoxLayout()
         top_layout.background_colour = (235, 222, 200)
-        top_layout.padding = [20, 20, 20, 20]
+        top_layout.padding = [0.1, 0.1, 0.1, 0.1]
         main_layout[top_layout] = 0.9
 
         test_text = Text_Input()

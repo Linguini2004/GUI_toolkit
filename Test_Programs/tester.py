@@ -9,7 +9,7 @@ class Example(App):
 
         main_layout = BoxLayout()
         main_layout.background_colour = (255, 255, 255)
-        main_layout.widget_border = 10
+        main_layout.widget_spacing = 0.05
         main_layout.mode = "horizontal"
         main_layout.padding = [0, 0, 0, 0]
 

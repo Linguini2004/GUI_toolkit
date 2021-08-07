@@ -3,12 +3,13 @@
 # The box layout allows for widgets to be stacked vertically or horizontally
 import pygame
 from Resources.Errors import PaddingError
+from Resources.Errors import Spacing_Error
 
 class BoxLayout:
     def __init__(self):
         self.mode = "horizontal"
         self.background_colour = (0, 0, 0)
-        self.widget_border = 10
+        self.widget_spacing = 0.05
         self.padding = [0, 0, 0, 0]
         # padding = [header, footer, left_margin, right_margin]
         # must be 0 to 1 as ratio of layout size
@@ -16,6 +17,8 @@ class BoxLayout:
         self._widgets = []
         self._act_padding = [0, 0, 0, 0]
         # dimensions based on the relative padding provided by the programmer
+        self._act_spacing = 0
+        # dimensions based on the relative spacing provided by the programmer
         self._num_widgets = 0
         self._widget_width = 0
         self._widget_height = 0
@@ -33,15 +36,19 @@ class BoxLayout:
         self._dimensions = dimensions
         self._layout_width = self._dimensions[0]
         self._layout_height = self._dimensions[1]
+
         for pad in self.padding:
             if pad > 1:
-                raise PaddingError("Padding can not be more than 100% of total size")
-        
+                raise PaddingError("Padding must range between 0 and 1")
+
         self._act_padding[0] = self.padding[0] * self._layout_height
         self._act_padding[1] = self.padding[1] * self._layout_height
         self._act_padding[2] = self.padding[2] * self._layout_width
         self._act_padding[3] = self.padding[3] * self._layout_width
-        
+
+        if self.widget_spacing > 1:
+            raise Spacing_Error("Spacing must range between 0 and 1")
+        self._act_spacing = self.widget_spacing * self._dimensions[0]
 
     def assign_position(self, position):
         """With the option of having multiple layouts on one screen, it must be the app.py
@@ -64,22 +71,22 @@ class BoxLayout:
 
         if self._num_widgets > 0:
             if self.mode == "horizontal":
-                self._widget_width = (self._layout_width - (self.widget_border * (self._num_widgets + 1))) / self._num_widgets
-                self._widget_height = self._layout_height - (self.widget_border * 2)
+                self._widget_width = (self._layout_width - (self._act_spacing * (self._num_widgets + 1))) / self._num_widgets
+                self._widget_height = self._layout_height - (self._act_spacing * 2)
 
                 for i in range(len(self._widgets)):
-                    x_coord = (padding[2] + (self.widget_border * (i + 1)) + (i * self._widget_width)) + self._position[0]
-                    y_coord = (padding[0] + self.widget_border) + self._position[1]
+                    x_coord = (padding[2] + (self._act_spacing * (i + 1)) + (i * self._widget_width)) + self._position[0]
+                    y_coord = (padding[0] + self._act_spacing) + self._position[1]
 
                     self._widget_coords.append((x_coord, y_coord))
 
             elif self.mode == "vertical":
-                self._widget_width = self._layout_width - (self.widget_border * 2)
-                self._widget_height = (self._layout_height - (self.widget_border * (self._num_widgets + 1))) / self._num_widgets
+                self._widget_width = self._layout_width - (self._act_spacing * 2)
+                self._widget_height = (self._layout_height - (self._act_spacing * (self._num_widgets + 1))) / self._num_widgets
 
                 for i in range(len(self._widgets)):
-                    x_coord = (padding[2] + self.widget_border) + self._position[0]
-                    y_coord = (padding[0] + (self.widget_border * (i + 1)) + (i * self._widget_height)) + self._position[1]
+                    x_coord = (padding[2] + self._act_spacing) + self._position[0]
+                    y_coord = (padding[0] + (self._act_spacing * (i + 1)) + (i * self._widget_height)) + self._position[1]
                     self._widget_coords.append((x_coord, y_coord))
 
     def _update_widgets(self):

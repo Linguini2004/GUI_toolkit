@@ -17,7 +17,7 @@ class Example(App):
         test_text.text = "This is a really long text intended to test whether the text wrapping works. There are 4 " \
                          "options for how this text can be aligned: left, right, center, and block."
         top_layout.add_widget(test_text)
-        top_layout.padding = [20, 0, 10, 10]
+        top_layout.padding = [0.1, 0, 0.05, 0.1]
         main_layout[top_layout] = 0.8
 
         bottom_layout = BoxLayout()
