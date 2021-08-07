@@ -1,0 +1,13 @@
+Just a list of things that need doing:
+ - Allow for the use of an image or icon as the face of a button
+ - Allow for the use of an icon and text as the face of a button
+ - Allow for the Text_Input widget to interact with the clipboard so that text can be pasted
+ - New widget ideas:
+    - clock
+    - stopwatch
+    - timer
+    - scroll page
+    - toggle switches
+    - slides (different pages that can be flicked through)
+    - seperators (lines that can be placed between layouts to visually separate them)
+    - graphs and charts

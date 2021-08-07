@@ -9,7 +9,7 @@ class BoxLayout:
     def __init__(self):
         self.mode = "horizontal"
         self.background_colour = (0, 0, 0)
-        self.widget_spacing = 0.05
+        self.widget_spacing = 0.025
         self.padding = [0, 0, 0, 0]
         # padding = [header, footer, left_margin, right_margin]
         # must be 0 to 1 as ratio of layout size
