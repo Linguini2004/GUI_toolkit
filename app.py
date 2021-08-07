@@ -17,7 +17,6 @@ class App:
 
     def _get_widgets(self, main_layout):
         widgets = []
-        print(main_layout[0])
         if type(main_layout) == list:
             if type(main_layout[0]) == list:
                 if type(main_layout[0][0]) == list:
@@ -130,7 +129,6 @@ class App:
 
             for i, (layout, size) in enumerate(main_layout.items()):
                 layout.draw_background(self._screen)
-                print("width", "height", layout_width, layout_heights[i])
                 layout.assign_dimensions((layout_width, layout_heights[i]))
                 layout.assign_position((0, sum(layout_heights[:i])))
         else:

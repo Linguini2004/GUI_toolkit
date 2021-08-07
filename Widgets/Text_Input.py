@@ -11,7 +11,7 @@ class Text_Input:
     def __init__(self):
         self.text_colour = (255, 255, 255)
         self.text = ""
-        self.font = "Rockwell"
+        self.font = "arial"
         self.font_size = 20
         self.align = 0
         self.border_thickness = 0
@@ -27,6 +27,7 @@ class Text_Input:
         self.header_active = True
         self.header_text = ""
         self.header_align = "top"
+        self.header_spacing = 0.01
         self.default_text = ""
         self.default_text_colour = (150, 150, 150)
 
@@ -138,14 +139,15 @@ class Text_Input:
             text = self.text
             color = self.text_colour
             align = self.align
+            spacing = self.header_spacing * self._dimensions[1]
 
             if self.header_active:
                 if self.header_align == "top":
-                    box_position[1] += font.render("H", False, color).get_height() + 10
-                    box_dimensions[1] -= font.render("H", False, color).get_height() + 10
+                    box_position[1] += font.render("H", False, color).get_height() + spacing
+                    box_dimensions[1] -= font.render("H", False, color).get_height() + spacing
                 elif self.header_align == "left":
-                    box_position[0] += (font.render(self.header_text, False, color).get_width() + 10)
-                    box_dimensions[0] -= (font.render(self.header_text, False, color).get_width() + 10)
+                    box_position[0] += (font.render(self.header_text, False, color).get_width() + spacing)
+                    box_dimensions[0] -= (font.render(self.header_text, False, color).get_width() + spacing)
 
                 self._draw_header(surface, font, color)
             

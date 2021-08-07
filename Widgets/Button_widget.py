@@ -14,7 +14,7 @@ class Button:
         self.text_colour = (255, 255, 255)
         self.size_hint = [1, 1]
         self.pos_hint = ""
-        self.font = "Rockwell"
+        self.font = "arial"
         self.font_size = 20
         self.rounded = False
         self.radius = 0.1

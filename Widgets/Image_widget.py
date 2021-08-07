@@ -4,13 +4,16 @@ from pygame import *
 class Image:
     def __init__(self):
         self.image_path = ""
-        self.padding = [0, 0, 0, 0]
         self.transparent = True
         self.header_active = False
         self.header_text = ""
         self.header_align = "top"
+        self.header_spacing = 0.01
+        self.header_colour = (0, 0, 0)
+        self.keep_proportion = True
+        self.font = "arial"
+        self.font_size = 20
 
-        self._act_padding = [0, 0, 0, 0]
         self._type = "image"
         self._dimensions = [0, 0]
         self._position = [0, 0]
@@ -26,6 +29,46 @@ class Image:
         Therefore the position is set by the layout object itself rather than the user or widget"""
 
         self._position = position
-
+    
+    def _draw_header(self, surface, font):
+        surface.blit(font.render(self.header_text, True, self.header_colour), (self._position[0], self._position[1]))
+    
     def draw(self, surface, pos):
-        pass
+        image_to_draw = pygame.image.load(self.image_path)
+        width = image_to_draw.get_width()
+        height = image_to_draw.get_height()
+        
+        image_position = list(self._position)
+        image_dimensions = list(self._dimensions)
+
+        font = pygame.font.SysFont(self.font, self.font_size)
+        spacing = self.header_spacing * self._dimensions[1]
+        
+        if self.header_active:
+            if self.header_align == "top":
+                image_position[1] += font.render("H", False, self.header_colour).get_height() + spacing
+                image_dimensions[1] -= font.render("H", False, self.header_colour).get_height() + spacing
+            elif self.header_align == "left":
+                image_position[0] += (font.render("H", False, self.header_colour).get_height() + spacing)
+                image_dimensions[0] -= (font.render("H", False, self.header_colour).get_height() + spacing)
+
+        self._draw_header(surface, font)
+
+        if self.keep_proportion:
+            screen_proportion = image_dimensions[0] / image_dimensions[1]
+            image_proportion = width / height
+            if image_dimensions[0] > image_dimensions[1]:
+                image_height = (image_dimensions[1] / height) * height
+                image_width = image_height * image_proportion
+                image_to_draw = pygame.transform.scale(image_to_draw, (int(image_width), int(image_height)))
+            else:
+                image_width = (image_dimensions[0] / width) * width
+                image_height = image_width / image_proportion
+                image_to_draw = pygame.transform.scale(image_to_draw, (int(image_width), int(image_height)))
+        else:
+            image_to_draw = pygame.transform.scale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
+
+        surface.blit(image_to_draw, (image_position[0], image_position[1]))
+        
+
+                

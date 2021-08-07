@@ -8,7 +8,7 @@ class Text:
     def __init__(self):
         self.text_colour = (255, 255, 255)
         self.text = ""
-        self.font = "Rockwell"
+        self.font = "arial"
         self.font_size = 20
         self.align = 0
         # align must be 0, 1, 2 or 3
