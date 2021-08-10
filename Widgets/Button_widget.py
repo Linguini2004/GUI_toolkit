@@ -3,6 +3,7 @@
 # Eventually you will be able to modify all aspects of the button such as image and texture
 import pygame
 from Resources.Curved import curve_shape
+from Resources.Image_size import adaptive_image_proportion
 from pygame import *
 
 class Button:
@@ -18,6 +19,14 @@ class Button:
         self.font_size = 20
         self.rounded = False
         self.radius = 0.1
+        self.display_image = False
+        self.just_image = False
+        self.image_path = ""
+        self.keep_proportion = True
+        self.scale_image = 0
+        # 0 to 1 (0 to 100% of maximum possible size)
+        self.image_padding = [0, 0, 0, 0]
+        # relative sizes [header, footer, left margin, right margin]
 
         self._type = "button"
         self._hover = False
@@ -56,6 +65,25 @@ class Button:
             self._pressed = True
             return True
 
+    def _draw_image(self, surface):
+        image_to_draw = pygame.image.load(self.image_path)
+        width = image_to_draw.get_width()
+        height = image_to_draw.get_height()
+
+        image_position = list(self._position)
+        image_position[0] += self.image_padding[2] * self._dimensions[0]
+        image_position[1] += self.image_padding[0] * self._dimensions[1]
+
+        adjustments = [self.image_padding[2] * self._dimensions[0], self.image_padding[0] * self._dimensions[1]]
+        image_dimensions = list(self._dimensions)
+
+        if self.keep_proportion:
+            image_to_draw = adaptive_image_proportion(width, height, image_position, image_dimensions, adjustments, self.scale_image, image_to_draw)
+        else:
+            image_to_draw = pygame.transform.scale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
+
+        surface.blit(image_to_draw, (image_position[0], image_position[1]))
+
     def draw(self, surface, pos):
         """Surface is the window on which the widget will be drawn and is defined by the app.py program"""
         self._mouse_over(pos)
@@ -71,21 +99,25 @@ class Button:
         else:
             draw_colour = self.colour
 
-        if not self.rounded:
-            pygame.draw.rect(surface,
-                             draw_colour,
-                             [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]]
-                             )
-        else:
-            curved_rectangle, pos = curve_shape(self.radius, (self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]), draw_colour)
-            surface.blit(curved_rectangle, pos)
+        if not self.just_image:
+            if not self.rounded:
+                pygame.draw.rect(surface,
+                                 draw_colour,
+                                 [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]]
+                                 )
+            else:
+                curved_rectangle, pos = curve_shape(self.radius, (self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]), draw_colour)
+                surface.blit(curved_rectangle, pos)
 
-        if self.text != "":
-            font = pygame.font.SysFont(self.font, self.font_size)
-            b_text = font.render(self.text, True, self.text_colour)
-            x_coord = self._position[0] + (self._dimensions[0] / 2 - b_text.get_width() / 2)
-            y_coord = self._position[1] + (self._dimensions[1] / 2 - b_text.get_height() / 2)
-            surface.blit(b_text, (x_coord, y_coord))
+            if self.text != "":
+                font = pygame.font.SysFont(self.font, self.font_size)
+                b_text = font.render(self.text, True, self.text_colour)
+                x_coord = self._position[0] + (self._dimensions[0] / 2 - b_text.get_width() / 2)
+                y_coord = self._position[1] + (self._dimensions[1] / 2 - b_text.get_height() / 2)
+                surface.blit(b_text, (x_coord, y_coord))
+
+        if self.display_image:
+            self._draw_image(surface)
 
     def bind(self, Application, method):
         self._action = getattr(Application, method)

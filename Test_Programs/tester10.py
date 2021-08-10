@@ -35,7 +35,7 @@ class Example(App):
 
         if True:
             image1 = Image()
-            image1.image_path = "/Test_Programs/NASA_logo.svg.png"
+            image1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/NASA_logo.svg.png"
             image1.padding = [0, 0, 0, 0]
             image1.keep_proportion = True
             image1.transparent = True

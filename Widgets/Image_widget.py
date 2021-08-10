@@ -1,5 +1,6 @@
 import pygame
 from pygame import *
+from Resources.Image_size import image_proportion
 
 class Image:
     def __init__(self):
@@ -55,20 +56,8 @@ class Image:
         self._draw_header(surface, font)
 
         if self.keep_proportion:
-            screen_proportion = image_dimensions[0] / image_dimensions[1]
-            image_proportion = width / height
-            if image_dimensions[0] > image_dimensions[1]:
-                image_height = (image_dimensions[1] / height) * height
-                image_width = image_height * image_proportion
-                image_to_draw = pygame.transform.scale(image_to_draw, (int(image_width), int(image_height)))
-            else:
-                image_width = (image_dimensions[0] / width) * width
-                image_height = image_width / image_proportion
-                image_to_draw = pygame.transform.scale(image_to_draw, (int(image_width), int(image_height)))
+            image_to_draw = image_proportion(width, height, image_dimensions, image_to_draw)
         else:
             image_to_draw = pygame.transform.scale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
 
         surface.blit(image_to_draw, (image_position[0], image_position[1]))
-        
-
-                
