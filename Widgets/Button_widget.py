@@ -74,7 +74,11 @@ class Button:
         image_position[0] += self.image_padding[2] * self._dimensions[0]
         image_position[1] += self.image_padding[0] * self._dimensions[1]
 
-        adjustments = [self.image_padding[2] * self._dimensions[0], self.image_padding[0] * self._dimensions[1]]
+        adjustments = [self.image_padding[0] * self._dimensions[1],
+                       self.image_padding[1] * self._dimensions[1],
+                       self.image_padding[2] * self._dimensions[0],
+                       self.image_padding[3] * self._dimensions[0]]
+
         image_dimensions = list(self._dimensions)
 
         if self.keep_proportion:

@@ -30,17 +30,19 @@ class Example(App):
             button1.display_image = True
             button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/NASA_logo.svg.png"
             button1.colour = (100, 100, 100)
-            button1.image_padding = [0.2, 0, 0.3, 0]
+            button1.image_padding = [0.1, 0, 0.6, 0]
             button1.scale_image = 0.75
             button1.rounded = True
             bottom_layout.add_widget(button1)
 
+            """
             button2 = Button()
             button2.text = "B2"
             button2.colour = (100, 100, 100)
             button2.pressed_colour = (255, 0, 0)
             button2.rounded = True
             bottom_layout.add_widget(button2)
+            """
 
         return main_layout
 

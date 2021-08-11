@@ -25,7 +25,7 @@ class Example(App):
 
         middle_layout = BoxLayout()
         middle_layout.background_colour = (200, 200, 200)
-        middle_layout.padding = [0, 0, 0.2, 0]
+        middle_layout.padding = [0, 0, 0, 0]
         main_layout[middle_layout] = 0.4
 
         bottom_layout = BoxLayout()
@@ -35,14 +35,15 @@ class Example(App):
 
         if True:
             image1 = Image()
-            image1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/NASA_logo.svg.png"
+            image1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/SpaceX-Logo.svg.png"
             image1.padding = [0, 0, 0, 0]
             image1.keep_proportion = True
             image1.transparent = True
             image1.header_active = True
             image1.header_text = "Image:"
-            image1.header_align = "top"
+            image1.header_align = "left"
             image1.header_colour = (50, 50, 50)
+            image1.header_spacing = 0.05
             middle_layout.add_widget(image1)
 
             button1 = Button()

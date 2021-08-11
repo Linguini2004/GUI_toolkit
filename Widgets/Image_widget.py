@@ -50,8 +50,9 @@ class Image:
                 image_position[1] += font.render("H", False, self.header_colour).get_height() + spacing
                 image_dimensions[1] -= font.render("H", False, self.header_colour).get_height() + spacing
             elif self.header_align == "left":
-                image_position[0] += (font.render("H", False, self.header_colour).get_height() + spacing)
-                image_dimensions[0] -= (font.render("H", False, self.header_colour).get_height() + spacing)
+
+                image_position[0] += (font.render(self.header_text, False, self.header_colour).get_width() + spacing)
+                image_dimensions[0] -= (font.render(self.header_text, False, self.header_colour).get_width() + spacing)
 
         self._draw_header(surface, font)
 
