@@ -37,6 +37,8 @@ class Button:
         self._dimensions = [0, 0]
         self._position = [0, 0]
         self._action = None
+        self._loaded_image = None
+        self._image_loaded = False
 
     def assign_dimensions(self, dimensions):
         """The provided size_hint is only advisory as certain layouts may manipulate dimensions in different ways
@@ -67,9 +69,17 @@ class Button:
             self._pressed = True
             return True
 
-    def _draw_image(self, surface):
-
+    def _load_image(self):
         image_to_draw = pygame.image.load(self.image_path)
+        return image_to_draw
+
+    def _draw_image(self, surface):
+        if not self._image_loaded:
+            self._loaded_image = self._load_image()
+            self._image_loaded = True
+
+        image_to_draw = self._loaded_image
+
         width = image_to_draw.get_width()
         height = image_to_draw.get_height()
         image_position = list(self._position)
