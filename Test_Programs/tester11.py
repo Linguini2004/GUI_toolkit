@@ -28,7 +28,11 @@ class Example(App):
         if True:
             button1 = Button()
             button1.display_image = True
-            button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/NASA_logo.svg.png"
+            #button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/NASA_logo.svg.png"
+            button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/SpaceX-Logo.svg.png"
+            #button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/tesla_logo.png"
+            #button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/boring_logo.png"
+            #button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/starship.png"
             button1.colour = (100, 100, 100)
             button1.image_padding = [0, 0, 0, 0]
             button1.scale_image = 0.75

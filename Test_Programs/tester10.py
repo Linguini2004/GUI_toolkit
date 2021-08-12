@@ -46,9 +46,10 @@ class Example(App):
             image1.transparent = True
             image1.header_active = True
             image1.header_text = "Image:"
-            image1.header_align = "left"
+            image1.header_align = "top"
             image1.header_colour = (50, 50, 50)
             image1.header_spacing = 0.05
+            image1.scale = 0.75
             middle_layout.add_widget(image1)
 
             button1 = Button()

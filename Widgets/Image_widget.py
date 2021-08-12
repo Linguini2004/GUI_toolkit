@@ -14,6 +14,7 @@ class Image:
         self.keep_proportion = True
         self.font = "arial"
         self.font_size = 20
+        self.scale = 1
 
         self._type = "image"
         self._dimensions = [0, 0]
@@ -57,7 +58,7 @@ class Image:
         self._draw_header(surface, font)
 
         if self.keep_proportion:
-            image_to_draw = image_proportion(width, height, image_dimensions, image_to_draw)
+            image_to_draw = image_proportion(width, height, image_dimensions, image_to_draw, self.scale)
         else:
             image_to_draw = pygame.transform.scale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
 

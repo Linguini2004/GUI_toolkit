@@ -4,6 +4,7 @@
 import pygame
 from Resources.Curved import curve_shape
 from Resources.Image_size import adaptive_image_proportion
+from Resources.Errors import PaddingError
 from pygame import *
 
 class Button:
@@ -74,6 +75,10 @@ class Button:
         image_position[0] += self.image_padding[2] * self._dimensions[0]
         image_position[1] += self.image_padding[0] * self._dimensions[1]
 
+        for i in self.image_padding:
+            if i > 1:
+                raise PaddingError("Padding must be between 0 and 1")
+
         adjustments = [self.image_padding[0] * self._dimensions[1],
                        self.image_padding[1] * self._dimensions[1],
                        self.image_padding[2] * self._dimensions[0],
@@ -82,7 +87,7 @@ class Button:
         image_dimensions = list(self._dimensions)
 
         if self.keep_proportion:
-            image_to_draw = adaptive_image_proportion(width, height, image_position, image_dimensions, adjustments, self.scale_image, image_to_draw)
+            image_to_draw = adaptive_image_proportion(width, height, image_position, image_dimensions, adjustments, image_to_draw, self.scale_image)
         else:
             image_to_draw = pygame.transform.scale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
 
