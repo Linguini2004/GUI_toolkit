@@ -5,7 +5,8 @@ import pygame
 from Resources.Curved import curve_shape
 from Resources.Image_size import adaptive_image_proportion
 from Resources.Errors import PaddingError
-from pygame import *
+import time
+#from pygame import *
 
 class Button:
     def __init__(self):
@@ -67,10 +68,10 @@ class Button:
             return True
 
     def _draw_image(self, surface):
+
         image_to_draw = pygame.image.load(self.image_path)
         width = image_to_draw.get_width()
         height = image_to_draw.get_height()
-
         image_position = list(self._position)
         image_position[0] += self.image_padding[2] * self._dimensions[0]
         image_position[1] += self.image_padding[0] * self._dimensions[1]

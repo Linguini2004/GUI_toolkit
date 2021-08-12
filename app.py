@@ -2,6 +2,7 @@
 # This involves drawing everything to the screen and housing the event loop
 # It does not house any classes and does not handle the logic behind objects (which are to be dealt with by the object's methods)
 import pygame
+import time
 from pygame.locals import *
 
 # noinspection PyAttributeOutsideInit
