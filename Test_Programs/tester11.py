@@ -37,6 +37,7 @@ class Example(App):
             button1.image_padding = [0, 0, 0, 0]
             button1.scale_image = 1
             button1.rounded = True
+            button1.bind(self.button1_clicked)
             bottom_layout.add_widget(button1)
 
             """
@@ -49,6 +50,10 @@ class Example(App):
             """
 
         return main_layout
+
+    def button1_clicked(self, button):
+        button.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/SpaceX-Logo.svg.png"
+
 
 if __name__ == "__main__":
     application = Example()

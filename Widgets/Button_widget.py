@@ -37,6 +37,7 @@ class Button:
         self._dimensions = [0, 0]
         self._position = [0, 0]
         self._action = None
+        self._previous_image = None
         self._loaded_image = None
         self._image_loaded = False
 
@@ -74,6 +75,11 @@ class Button:
         return image_to_draw
 
     def _draw_image(self, surface):
+        if self.image_path != self._previous_image:
+            self._image_loaded = False
+
+        self._previous_image = self.image_path
+
         if not self._image_loaded:
             self._loaded_image = self._load_image()
             self._image_loaded = True
@@ -139,8 +145,8 @@ class Button:
         if self.display_image:
             self._draw_image(surface)
 
-    def bind(self, Application, method):
-        self._action = getattr(Application, method)
+    def bind(self, function):
+        self._action = function
 
     def action(self):
         if self._action is not None:
