@@ -9,28 +9,36 @@ from pygame import *
 
 class Text_Input:
     def __init__(self):
-        self.text_colour = (255, 255, 255)
-        self.text = ""
-        self.font = "arial"
-        self.font_size = 20
-        self.align = 0
-        self.border_thickness = 0
-        self.padding = [0, 0, 0, 0]
-        # header, footer, margin_left, margin_right
+        # colour attributes:
         self.border_colour = (50, 50, 50)
         self.background_colour = (100, 100, 100)
         self.hover_colour = (100, 100, 100)
         self.active_colour = (100, 100, 100)
+
+        # text attributes:
+        self.text = ""
+        self.font = "arial"
+        self.text_colour = (255, 255, 255)
+        self.font_size = 20
+        self.default_text = ""
+        self.default_text_colour = (150, 150, 150)
+        self.align = 0
         # align must be 0, 1, 2 or 3
+
+        # dimension attributes:
+        self.border_thickness = 0
         self.rounded = False
         self.radius = 0.1
+        self.padding = [0, 0, 0, 0]
+        # header, footer, margin_left, margin_right
+
+        # header attributes:
         self.header_active = True
         self.header_text = ""
         self.header_align = "top"
         self.header_spacing = 0.01
-        self.default_text = ""
-        self.default_text_colour = (150, 150, 150)
 
+        # private attributes:
         self._active = False
         self._act_padding = [0, 0, 0, 0]
         self._dimensions = [0, 0]

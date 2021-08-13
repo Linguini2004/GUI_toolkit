@@ -39,7 +39,7 @@ class Example(App):
         middle_layout.background_colour = (235, 222, 200)
         middle_layout.padding = [0.1, 0.1, 0.1, 0.1]
         main_layout[middle_layout] = 0.45
-        
+
         test_text2 = Text_Input()
         test_text2.text_colour = (11, 62, 146)
         test_text2.background_colour = (139, 153, 175)
@@ -62,8 +62,6 @@ class Example(App):
 
         if True:
             button1 = Button()
-            button1.text = "Home"
-            button1.font = self.font
             button1.colour = (154, 122, 135)
             button1.pressed_colour = (0, 255, 0)
             button1.rounded = True
@@ -71,8 +69,6 @@ class Example(App):
             bottom_layout.add_widget(button1)
 
             button2 = Button()
-            button2.text = "Shop"
-            button2.font = self.font
             button2.colour = (154, 122, 135)
             button2.pressed_colour = (255, 0, 0)
             button2.rounded = True
@@ -80,8 +76,6 @@ class Example(App):
             bottom_layout.add_widget(button2)
 
             button3 = Button()
-            button3.text = "Story"
-            button3.font = self.font
             button3.colour = (154, 122, 135)
             button3.pressed_colour = (0, 0, 255)
             button3.rounded = True
@@ -89,8 +83,6 @@ class Example(App):
             bottom_layout.add_widget(button3)
 
             button4 = Button()
-            button4.text = "Friends"
-            button4.font = self.font
             button4.colour = (154, 122, 135)
             button4.pressed_colour = (255, 0, 255)
             button4.rounded = True
@@ -98,6 +90,7 @@ class Example(App):
             bottom_layout.add_widget(button4)
 
         return main_layout
+
 
 if __name__ == "__main__":
     application = Example()

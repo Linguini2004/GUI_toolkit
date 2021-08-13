@@ -7,18 +7,15 @@ from Resources.Errors import Spacing_Error
 
 class BoxLayout:
     def __init__(self):
+        # config attributes
         self.mode = "horizontal"
         self.background_colour = (0, 0, 0)
         self.widget_spacing = 0.025
         self.padding = [0, 0, 0, 0]
-        # padding = [header, footer, left_margin, right_margin]
-        # must be 0 to 1 as ratio of layout size
+        # padding = [header, footer, left_margin, right_margin] must be 0 to 1
 
+        # private attributes:
         self._widgets = []
-        self._act_padding = [0, 0, 0, 0]
-        # dimensions based on the relative padding provided by the programmer
-        self._act_spacing = 0
-        # dimensions based on the relative spacing provided by the programmer
         self._num_widgets = 0
         self._widget_width = 0
         self._widget_height = 0
@@ -27,6 +24,10 @@ class BoxLayout:
         self._position = [0, 0]
         self._layout_width = 0
         self._layout_height = 0
+        self._act_padding = [0, 0, 0, 0]
+        # dimensions based on the relative padding provided by the programmer
+        self._act_spacing = 0
+        # dimensions based on the relative spacing provided by the programmer
 
     def assign_dimensions(self, dimensions):
         """With the option of having multiple layouts on one screen, it must be the app.py 

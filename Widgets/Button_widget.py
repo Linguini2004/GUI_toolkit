@@ -5,31 +5,43 @@ import pygame
 from Resources.Curved import curve_shape
 from Resources.Image_size import adaptive_image_proportion
 from Resources.Errors import PaddingError
-import time
-#from pygame import *
 
 class Button:
     def __init__(self):
+        # colour attributes:
         self.colour = (50, 50, 50)
         self.hover_colour = (50, 50, 50)
         self.pressed_colour = (50, 50, 50)
-        self.text = ""
         self.text_colour = (255, 255, 255)
-        self.size_hint = [1, 1]
-        self.pos_hint = ""
+
+        # text attributes:
+        self.text = ""
         self.font = "arial"
         self.font_size = 20
+
+        # dimension attributes:
+        self.size_hint = [1, 1]
+        self.pos_hint = ""
         self.rounded = False
         self.radius = 0.1
+        self.image_padding = [0, 0, 0, 0]
+        # relative sizes [header, footer, left margin, right margin]
+
+        # image attributes:
         self.display_image = False
         self.just_image = False
         self.image_path = ""
         self.keep_proportion = True
-        self.scale_image = 0
+        self.scale_image = 1
         # 0 to 1 (0 to 100% of maximum possible size)
-        self.image_padding = [0, 0, 0, 0]
-        # relative sizes [header, footer, left margin, right margin]
 
+        # icon attributes:
+        self.display_icon = False
+        self.icon_name = ""
+        self.icon_path = ""
+        self.icon_align = ""
+
+        # private attributes:
         self._type = "button"
         self._hover = False
         self._pressed = False

@@ -4,18 +4,24 @@ from Resources.Image_size import image_proportion
 
 class Image:
     def __init__(self):
+        # image attributes:
         self.image_path = ""
         self.transparent = True
+
+        # dimension attributes:
+        self.keep_proportion = True
+        self.scale = 1
+
+        # header attributes:
         self.header_active = False
         self.header_text = ""
         self.header_align = "top"
         self.header_spacing = 0.01
         self.header_colour = (0, 0, 0)
-        self.keep_proportion = True
         self.font = "arial"
         self.font_size = 20
-        self.scale = 1
 
+        # private attributes:
         self._type = "image"
         self._dimensions = [0, 0]
         self._position = [0, 0]

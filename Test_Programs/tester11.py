@@ -40,14 +40,15 @@ class Example(App):
             button1.bind(self.button1_clicked)
             bottom_layout.add_widget(button1)
 
-            """
+
             button2 = Button()
-            button2.text = "B2"
+            button2.display_image = True
+            button2.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/SpaceX-Logo.svg.png"
             button2.colour = (100, 100, 100)
             button2.pressed_colour = (255, 0, 0)
             button2.rounded = True
             bottom_layout.add_widget(button2)
-            """
+
 
         return main_layout
 

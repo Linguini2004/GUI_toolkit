@@ -6,6 +6,7 @@ from pygame import *
 
 class Text:
     def __init__(self):
+        # text attributes:
         self.text_colour = (255, 255, 255)
         self.text = ""
         self.font = "arial"
@@ -13,6 +14,7 @@ class Text:
         self.align = 0
         # align must be 0, 1, 2 or 3
 
+        # private attributes:
         self._type = "text"
         self._dimensions = [0, 0]
         self. _position = [0, 0]
