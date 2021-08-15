@@ -3,3 +3,6 @@ class PaddingError(ValueError):
 
 class Spacing_Error(ValueError):
     pass
+
+class Icon_Error(FileNotFoundError):
+    pass

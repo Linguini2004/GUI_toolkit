@@ -66,6 +66,8 @@ class Example(App):
             button1.pressed_colour = (0, 255, 0)
             button1.rounded = True
             button1.radius = 0.5
+            button1.display_icon = True
+            button1.icon_name = "calendar"
             bottom_layout.add_widget(button1)
 
             button2 = Button()
@@ -90,6 +92,8 @@ class Example(App):
             bottom_layout.add_widget(button4)
 
         return main_layout
+
+
 
 
 if __name__ == "__main__":

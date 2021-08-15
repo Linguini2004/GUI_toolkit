@@ -2,9 +2,11 @@
 # This is a simple button which initiates a response when clicked
 # Eventually you will be able to modify all aspects of the button such as image and texture
 import pygame
+import os
+import pathlib
 from Resources.Curved import curve_shape
 from Resources.Image_size import adaptive_image_proportion
-from Resources.Errors import PaddingError
+from Resources.Errors import PaddingError, Icon_Error
 
 class Button:
     def __init__(self):
@@ -40,6 +42,7 @@ class Button:
         self.icon_name = ""
         self.icon_path = ""
         self.icon_align = ""
+        # left, right, center
 
         # private attributes:
         self._type = "button"
@@ -52,6 +55,8 @@ class Button:
         self._previous_image = None
         self._loaded_image = None
         self._image_loaded = False
+        self._action_args = None
+        self._cwd = os.getcwd()
 
     def assign_dimensions(self, dimensions):
         """The provided size_hint is only advisory as certain layouts may manipulate dimensions in different ways
@@ -85,6 +90,39 @@ class Button:
     def _load_image(self):
         image_to_draw = pygame.image.load(self.image_path)
         return image_to_draw
+
+    def _load_icon(self):
+
+        while True:
+            os.chdir(os.path.dirname(os.getcwd()))
+            if "GUI_toolkit" in os.getcwd()[12:]:
+                break
+            else:
+                os.chdir(os.path.dirname(os.getcwd()))
+
+        if self.icon_name != "":
+            icon_paths = "Resources/Icons"
+            icon_paths = os.path.abspath(icon_paths).replace(os.sep, "/")
+            for icon in os.listdir(icon_paths):
+                if icon.strip(".png")[4:] == self.icon_name:
+                    icon_path = os.path.join(icon_paths, icon).replace(os.sep, "/")
+                    found = True
+
+            if not found:
+                raise Icon_Error("The selected icon does not exist")
+        else:
+            try:
+                icon_path = self.icon_path
+            except FileNotFoundError:
+                raise Icon_Error("The given icon path does not exist")
+
+        icon_to_draw = pygame.image.load(icon_path)
+        os.chdir(self._cwd)
+
+        return icon_to_draw
+
+    def _draw_icon(self, surface):
+        self._load_icon()
 
     def _draw_image(self, surface):
         if self.image_path != self._previous_image:
@@ -156,12 +194,15 @@ class Button:
 
         if self.display_image:
             self._draw_image(surface)
+        elif self.display_icon:
+            self._draw_icon(surface)
 
-    def bind(self, function):
+    def bind(self, function, *args):
         self._action = function
+        self._action_args = args
 
     def action(self):
         if self._action is not None:
-            self._action(self)
+            self._action(self, *self._action_args)
         else:
             print("NoActionBound")

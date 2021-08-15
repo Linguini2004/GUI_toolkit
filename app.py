@@ -140,10 +140,11 @@ class App:
 
     def run(self):
         pygame.init()
-        self._screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-        pygame.display.set_caption(self.title)
-        self._running = True
         main_layout = self.build()
+        print(self.screen_width, self.screen_height)
+        pygame.display.set_caption(self.title)
+        self._screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        self._running = True
         widgets = self._get_widgets(main_layout)
         self._assign_layout_params(main_layout)
 
