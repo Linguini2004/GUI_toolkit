@@ -33,7 +33,7 @@ def adaptive_image_proportion(width, height, position, dimensions, adjustments, 
         image_width = image_height * image_proportion
 
 
-    image_to_draw = pygame.transform.scale(image_to_draw, (int(image_width), int(image_height)))
+    image_to_draw = pygame.transform.smoothscale(image_to_draw, (int(image_width), int(image_height)))
 
     return image_to_draw
 
@@ -52,6 +52,6 @@ def image_proportion(width, height, dimensions, image_to_draw, scale=1):
         image_height = dimensions[1] * scale
         image_width = (dimensions[1] * scale) * image_proportion
 
-    image_to_draw = pygame.transform.scale(image_to_draw, (int(image_width), int(image_height)))
+    image_to_draw = pygame.transform.smoothscale(image_to_draw, (int(image_width), int(image_height)))
 
     return image_to_draw

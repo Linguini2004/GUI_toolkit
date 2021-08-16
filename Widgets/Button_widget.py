@@ -41,7 +41,9 @@ class Button:
         self.display_icon = False
         self.icon_name = ""
         self.icon_path = ""
-        self.icon_align = ""
+        self.icon_align = "center"
+        self.icon_spacing = 0.1
+        self.icon_scale = 1
         # left, right, center
 
         # private attributes:
@@ -122,7 +124,24 @@ class Button:
         return icon_to_draw
 
     def _draw_icon(self, surface):
-        self._load_icon()
+        icon_to_draw = self._load_icon()
+
+        icon_position = list(self._position)
+
+        icon_height = (self._dimensions[1] - ((self.icon_spacing * self._dimensions[1]) * 2)) * self.icon_scale
+        icon_width = icon_height
+        icon_position[1] += (self._dimensions[1] / 2) - (icon_height / 2)
+
+        if self.icon_align == "left":
+            icon_position[0] += self.icon_spacing * self._dimensions[0]
+        elif self.icon_align == "right":
+            icon_position[0] = (icon_position[0] + self._dimensions[0]) - (self.icon_spacing * self._dimensions[0])
+        else:
+            icon_position[0] += ((self._dimensions[0] / 2) - (icon_width / 2))
+
+        image_to_draw = pygame.transform.smoothscale(icon_to_draw, (int(icon_width), int(icon_height)))
+
+        surface.blit(image_to_draw, (icon_position[0], icon_position[1]))
 
     def _draw_image(self, surface):
         if self.image_path != self._previous_image:
@@ -156,7 +175,7 @@ class Button:
         if self.keep_proportion:
             image_to_draw = adaptive_image_proportion(width, height, image_position, image_dimensions, adjustments, image_to_draw, self.scale_image)
         else:
-            image_to_draw = pygame.transform.scale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
+            image_to_draw = pygame.transform.smoothscale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
 
         surface.blit(image_to_draw, (image_position[0], image_position[1]))
 

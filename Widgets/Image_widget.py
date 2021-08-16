@@ -66,6 +66,6 @@ class Image:
         if self.keep_proportion:
             image_to_draw = image_proportion(width, height, image_dimensions, image_to_draw, self.scale)
         else:
-            image_to_draw = pygame.transform.scale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
+            image_to_draw = pygame.transform.smoothscale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
 
         surface.blit(image_to_draw, (image_position[0], image_position[1]))
