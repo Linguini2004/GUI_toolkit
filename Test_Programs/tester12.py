@@ -80,7 +80,7 @@ class Example(App):
             button2.rounded = True
             button2.radius = 0.5
             button2.display_icon = True
-            button2.icon_name = "phone-call"
+            button2.icon_name = "test26"
             button2.icon_align = "center"
             button2.icon_scale = 0.9
             bottom_layout.add_widget(button2)

@@ -110,6 +110,8 @@ class Button:
                 if icon.strip(".png")[4:] == self.icon_name:
                     icon_path = os.path.join(icon_paths, icon).replace(os.sep, "/")
                     found = True
+                else:
+                    found = False
 
             if not found:
                 raise Icon_Error("The selected icon does not exist")
