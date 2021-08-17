@@ -3,7 +3,6 @@
 # Eventually you will be able to modify all aspects of the button such as image and texture
 import pygame
 import os
-import pathlib
 from Resources.Curved import curve_shape
 from Resources.Image_size import adaptive_image_proportion
 from Resources.Errors import PaddingError, Icon_Error
@@ -44,6 +43,7 @@ class Button:
         self.icon_align = "center"
         self.icon_spacing = 0.1
         self.icon_scale = 1
+        self.icon_colour = (0, 0, 0)
         # left, right, center
 
         # private attributes:
@@ -57,6 +57,8 @@ class Button:
         self._previous_image = None
         self._loaded_image = None
         self._image_loaded = False
+        self._loaded_icon = None
+        self._icon_loaded = False
         self._action_args = None
         self._cwd = os.getcwd()
 
@@ -94,7 +96,6 @@ class Button:
         return image_to_draw
 
     def _load_icon(self):
-
         while True:
             os.chdir(os.path.dirname(os.getcwd()))
             if "GUI_toolkit" in os.getcwd()[12:]:
@@ -121,11 +122,16 @@ class Button:
         icon_to_draw = pygame.image.load(icon_path)
         os.chdir(self._cwd)
 
+        icon_to_draw.fill(self.icon_colour, special_flags=pygame.BLEND_ADD)
+
         return icon_to_draw
 
     def _draw_icon(self, surface):
-        icon_to_draw = self._load_icon()
+        if not self._icon_loaded:
+            self._loaded_icon = self._load_icon()
+            self._icon_loaded = True
 
+        icon_to_draw = self._loaded_icon
         icon_position = list(self._position)
 
         icon_height = (self._dimensions[1] - ((self.icon_spacing * self._dimensions[1]) * 2)) * self.icon_scale

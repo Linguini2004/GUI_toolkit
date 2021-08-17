@@ -141,7 +141,6 @@ class App:
     def run(self):
         pygame.init()
         main_layout = self.build()
-        print(self.screen_width, self.screen_height)
         pygame.display.set_caption(self.title)
         self._screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self._running = True

@@ -63,6 +63,7 @@ class Example(App):
         if True:
             button1 = Button()
             button1.colour = (154, 122, 135)
+            button1.hover_colour = (114, 82, 95)
             button1.pressed_colour = (0, 255, 0)
             button1.rounded = True
             button1.radius = 0.5
@@ -70,6 +71,7 @@ class Example(App):
             button1.icon_name = "home"
             button1.icon_align = "center"
             button1.icon_scale = 0.9
+            button1.icon_colour = (0, 0, 255)
             bottom_layout.add_widget(button1)
 
             button2 = Button()
