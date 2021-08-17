@@ -68,7 +68,7 @@ class Example(App):
             button1.rounded = True
             button1.radius = 0.5
             button1.display_icon = True
-            button1.icon_name = "home"
+            button1.icon_name = "left-arrow"
             button1.icon_align = "center"
             button1.icon_scale = 0.9
             button1.icon_colour = (0, 0, 255)
@@ -80,7 +80,7 @@ class Example(App):
             button2.rounded = True
             button2.radius = 0.5
             button2.display_icon = True
-            button2.icon_name = "test26"
+            button2.icon_name = "right-arrow"
             button2.icon_align = "center"
             button2.icon_scale = 0.9
             bottom_layout.add_widget(button2)
@@ -91,7 +91,7 @@ class Example(App):
             button3.rounded = True
             button3.radius = 0.5
             button3.display_icon = True
-            button3.icon_name = "email"
+            button3.icon_name = "home"
             button3.icon_align = "center"
             button3.icon_scale = 0.9
             bottom_layout.add_widget(button3)
@@ -102,7 +102,7 @@ class Example(App):
             button4.rounded = True
             button4.radius = 0.5
             button4.display_icon = True
-            button4.icon_name = "settings"
+            button4.icon_name = "add"
             button4.icon_align = "center"
             button4.icon_scale = 0.9
             bottom_layout.add_widget(button4)

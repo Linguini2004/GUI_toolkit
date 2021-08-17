@@ -6,7 +6,7 @@ def adaptive_image_proportion(width, height, position, dimensions, adjustments, 
     screen_proportion = dimensions[0] / dimensions[1]
 
     """This function uses the code from the image_proportion function to set the maximum image width
-    and height based on the dimensions of the widget. This is then multiplied by the scale"""
+    and height based on the dimensions of the widget. This is then multiplied by the scale"""#
 
     if image_proportion > screen_proportion:
         image_width = dimensions[0] * scale

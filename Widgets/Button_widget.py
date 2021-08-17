@@ -5,6 +5,7 @@ import pygame
 import os
 from Resources.Curved import curve_shape
 from Resources.Image_size import adaptive_image_proportion
+from Resources.Image_size import image_proportion
 from Resources.Errors import PaddingError, Icon_Error
 
 class Button:
@@ -25,8 +26,6 @@ class Button:
         self.pos_hint = ""
         self.rounded = False
         self.radius = 0.1
-        self.image_padding = [0, 0, 0, 0]
-        # relative sizes [header, footer, left margin, right margin]
 
         # image attributes:
         self.display_image = False
@@ -34,7 +33,12 @@ class Button:
         self.image_path = ""
         self.keep_proportion = True
         self.scale_image = 1
+        self.image_spacing = 0.01
         # 0 to 1 (0 to 100% of maximum possible size)
+        self.image_padding = [0, 0, 0.1, 0.1]
+        # relative sizes [header, footer, left margin, right margin]
+        self.image_align = ""
+        # default none, can be left, center/re, or right
 
         # icon attributes:
         self.display_icon = False
@@ -104,17 +108,17 @@ class Button:
                 os.chdir(os.path.dirname(os.getcwd()))
 
         if self.icon_name != "":
+            found = False
             icon_paths = "Resources/Icons"
             icon_paths = os.path.abspath(icon_paths).replace(os.sep, "/")
             for icon in os.listdir(icon_paths):
                 if icon.strip(".png")[4:] == self.icon_name:
                     icon_path = os.path.join(icon_paths, icon).replace(os.sep, "/")
                     found = True
-                else:
-                    found = False
 
             if not found:
                 raise Icon_Error("The selected icon does not exist")
+
         else:
             try:
                 icon_path = self.icon_path
@@ -179,9 +183,20 @@ class Button:
                        self.image_padding[3] * self._dimensions[0]]
 
         image_dimensions = list(self._dimensions)
+        image_spacing = self.image_spacing * self._dimensions[0]
 
         if self.keep_proportion:
-            image_to_draw = adaptive_image_proportion(width, height, image_position, image_dimensions, adjustments, image_to_draw, self.scale_image)
+            if self.image_align != "":
+                image_to_draw = image_proportion(width, height, image_dimensions, image_to_draw, self.scale_image)
+                image_position[1] += (self._dimensions[1] / 2) - (image_to_draw.get_height() / 2)
+                if self.image_align == "left":
+                    image_position[0] = self._position[0] + image_spacing
+                elif self.image_align == "right":
+                    image_position[0] = (self._position[0] + self._dimensions[0]) - (image_to_draw.get_width() + image_spacing)
+                else:
+                    image_position[0] = self._position[0] + ((self._dimensions[0] / 2) - (image_to_draw.get_width() / 2))
+            else:
+                image_to_draw = adaptive_image_proportion(width, height, image_position, image_dimensions, adjustments, image_to_draw, self.scale_image)
         else:
             image_to_draw = pygame.transform.smoothscale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
 
