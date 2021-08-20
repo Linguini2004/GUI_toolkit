@@ -6,3 +6,6 @@ class Spacing_Error(ValueError):
 
 class Icon_Error(FileNotFoundError):
     pass
+
+class Button_Error(NotImplementedError):
+    pass

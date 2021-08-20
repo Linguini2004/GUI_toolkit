@@ -6,7 +6,8 @@ import os
 from Resources.Curved import curve_shape
 from Resources.Image_size import adaptive_image_proportion
 from Resources.Image_size import image_proportion
-from Resources.Errors import PaddingError, Icon_Error
+#from Resources.Errors import PaddingError, Icon_Error
+from Resources.Errors import *
 
 class Button:
     def __init__(self):
@@ -20,6 +21,9 @@ class Button:
         self.text = ""
         self.font = "arial"
         self.font_size = 20
+        self.text_spacing = 0.05
+        self.text_align = "centre"
+        # default center, can be left, centre/er, or right
 
         # dimension attributes:
         self.size_hint = [1, 1]
@@ -44,10 +48,10 @@ class Button:
         self.display_icon = False
         self.icon_name = ""
         self.icon_path = ""
-        self.icon_align = "center"
         self.icon_spacing = 0.1
         self.icon_scale = 1
         self.icon_colour = (0, 0, 0)
+        self.icon_align = "center"
         # left, right, center
 
         # private attributes:
@@ -140,16 +144,31 @@ class Button:
         icon_to_draw = self._loaded_icon
         icon_position = list(self._position)
 
-        icon_height = (self._dimensions[1] - ((self.icon_spacing * self._dimensions[1]) * 2)) * self.icon_scale
-        icon_width = icon_height
+        if self._dimensions[0] > self._dimensions[1]:
+            icon_height = (self._dimensions[1] - ((self.icon_spacing * self._dimensions[1]) * 2)) * self.icon_scale
+            icon_width = icon_height
+        else:
+            icon_width = (self._dimensions[0] - ((self.icon_spacing * self._dimensions[0]) * 2)) * self.icon_scale
+            icon_height = icon_width
+
         icon_position[1] += (self._dimensions[1] / 2) - (icon_height / 2)
 
         if self.icon_align == "left":
             icon_position[0] += self.icon_spacing * self._dimensions[0]
+            if self.text != "":
+                width = self._dimensions[0] - (icon_width + (self.icon_spacing * self._dimensions[0]))
+                self._draw_text(surface, self.text_align, [icon_position[0] + icon_width, self._position[1]], [width, self._dimensions[1]])
+
         elif self.icon_align == "right":
-            icon_position[0] = (icon_position[0] + self._dimensions[0]) - (self.icon_spacing * self._dimensions[0])
+            icon_position[0] = (icon_position[0] + self._dimensions[0]) - ((self.icon_spacing * self._dimensions[0]) + icon_width)
+            if self.text != "":
+                width = self._dimensions[0] - (icon_width + (self.icon_spacing * self._dimensions[0]))
+                self._draw_text(surface, self.text_align, [self._position[0], self._position[1]], [width, self._dimensions[1]])
+
         else:
             icon_position[0] += ((self._dimensions[0] / 2) - (icon_width / 2))
+            if self.text != "":
+                raise Button_Error("You cannot currently have text and an icon in a button if the button is not left or right aligned")
 
         image_to_draw = pygame.transform.smoothscale(icon_to_draw, (int(icon_width), int(icon_height)))
 
@@ -189,18 +208,43 @@ class Button:
             if self.image_align != "":
                 image_to_draw = image_proportion(width, height, image_dimensions, image_to_draw, self.scale_image)
                 image_position[1] += (self._dimensions[1] / 2) - (image_to_draw.get_height() / 2)
+
                 if self.image_align == "left":
                     image_position[0] = self._position[0] + image_spacing
                 elif self.image_align == "right":
                     image_position[0] = (self._position[0] + self._dimensions[0]) - (image_to_draw.get_width() + image_spacing)
                 else:
                     image_position[0] = self._position[0] + ((self._dimensions[0] / 2) - (image_to_draw.get_width() / 2))
+
             else:
                 image_to_draw = adaptive_image_proportion(width, height, image_position, image_dimensions, adjustments, image_to_draw, self.scale_image)
         else:
             image_to_draw = pygame.transform.smoothscale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
 
         surface.blit(image_to_draw, (image_position[0], image_position[1]))
+
+    def _draw_text(self, surface, text_align, position, dimensions):
+        spacing = self.text_spacing * dimensions[0]
+
+        while True:
+            font = pygame.font.SysFont(self.font, self.font_size)
+            b_text = font.render(self.text, True, self.text_colour)
+            print(b_text.get_width(), dimensions[0])
+            if (spacing * 2) + b_text.get_width() > dimensions[0]:
+                self.font_size -= 1
+            else:
+                break
+
+        if text_align == "left":
+            x_coord = position[0] + spacing
+        elif text_align == "right":
+            x_coord = (position[0] + dimensions[0]) - (b_text.get_width() + spacing)
+        else:
+            x_coord = position[0] + (dimensions[0] / 2 - b_text.get_width() / 2)
+
+        y_coord = position[1] + (dimensions[1] / 2 - b_text.get_height() / 2)
+
+        surface.blit(b_text, (x_coord, y_coord))
 
     def draw(self, surface, pos):
         """Surface is the window on which the widget will be drawn and is defined by the app.py program"""
@@ -227,17 +271,19 @@ class Button:
                 curved_rectangle, pos = curve_shape(self.radius, (self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]), draw_colour)
                 surface.blit(curved_rectangle, pos)
 
-            if self.text != "":
-                font = pygame.font.SysFont(self.font, self.font_size)
-                b_text = font.render(self.text, True, self.text_colour)
-                x_coord = self._position[0] + (self._dimensions[0] / 2 - b_text.get_width() / 2)
-                y_coord = self._position[1] + (self._dimensions[1] / 2 - b_text.get_height() / 2)
-                surface.blit(b_text, (x_coord, y_coord))
+        if self.text != "" and self.display_image:
+            raise Button_Error("You cannot currently display an image and text within a button")
+
+        if self.display_image and self.display_icon:
+            raise Button_Error("You cannot currently display an image and an icon within a button")
 
         if self.display_image:
             self._draw_image(surface)
-        elif self.display_icon:
+
+        if self.display_icon:
             self._draw_icon(surface)
+        elif self.text != "":
+            self._draw_text(surface, self.text_align, self._position, self._dimensions)
 
     def bind(self, function, *args):
         self._action = function
