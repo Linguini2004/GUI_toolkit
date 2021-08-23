@@ -2,7 +2,6 @@ import pygame
 from pygame import *
 
 def wrap_text(surface, text, color, rect, font, align, aa=True, bkg=None):
-
     textAlignLeft = 0
     textAlignRight = 1
     textAlignCenter = 2

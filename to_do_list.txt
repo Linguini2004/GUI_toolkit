@@ -1,5 +1,4 @@
 All the things that are still incomplete:
+- Allow layouts or sets of layouts to allow scroll features
 - Add the ability to have text with images either in or out of buttons
-- Add the ability to have text with icons in buttons
 - Refine the ability to have a button be only an image
-- Make sure that the icon code checks the limiting size of the icon

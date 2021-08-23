@@ -229,7 +229,6 @@ class Button:
         while True:
             font = pygame.font.SysFont(self.font, self.font_size)
             b_text = font.render(self.text, True, self.text_colour)
-            print(b_text.get_width(), dimensions[0])
             if (spacing * 2) + b_text.get_width() > dimensions[0]:
                 self.font_size -= 1
             else:
