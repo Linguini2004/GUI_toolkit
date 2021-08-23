@@ -43,7 +43,7 @@ while not quit:
 
     screen.blit(intermediate, (0, scroll_y))
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(0)
 
 '''
 bare minimum:

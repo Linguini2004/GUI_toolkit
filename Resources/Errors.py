@@ -9,3 +9,6 @@ class Icon_Error(FileNotFoundError):
 
 class Button_Error(NotImplementedError):
     pass
+
+class Layout_Error(NotImplementedError):
+    pass
