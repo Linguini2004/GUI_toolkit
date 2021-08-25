@@ -28,29 +28,32 @@ class Example(App):
         if True:
             button1 = Button()
             button1.display_image = True
-            button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/NASA_logo.svg.png"
+            button1.image_path = "/Test_Programs/NASA_logo.svg.png"
+            #button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/SpaceX-Logo.svg.png"
+            #button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/tesla_logo.png"
+            #button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/boring_logo.png"
+            #button1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/starship.png"
             button1.colour = (100, 100, 100)
-            button1.image_align = "right"
-            button1.just_image = True
+            button1.image_padding = [0, 0, 0, 0]
             button1.scale_image = 1
             button1.rounded = True
             button1.bind(self.button1_clicked)
             bottom_layout.add_widget(button1)
 
+
             button2 = Button()
             button2.display_image = True
-            button2.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/SpaceX-Logo.svg.png"
+            button2.image_path = "/Test_Programs/SpaceX-Logo.svg.png"
             button2.colour = (100, 100, 100)
-            button2.scale_image = 0.75
-            button2.image_align = "center"
             button2.pressed_colour = (255, 0, 0)
             button2.rounded = True
             bottom_layout.add_widget(button2)
 
+
         return main_layout
 
     def button1_clicked(self, button):
-        button.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/SpaceX-Logo.svg.png"
+        button.image_path = "/Test_Programs/SpaceX-Logo.svg.png"
 
 
 if __name__ == "__main__":

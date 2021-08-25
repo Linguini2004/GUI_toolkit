@@ -38,7 +38,7 @@ class Example(App):
             #image1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/NASA_logo.svg.png"
             #image1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/SpaceX-Logo.svg.png"
             #image1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/tesla_logo.png"
-            image1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/boring_logo.png"
+            image1.image_path = "/Test_Programs/boring_logo.png"
             #image1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/starship.png"
 
             image1.padding = [0, 0, 0, 0]

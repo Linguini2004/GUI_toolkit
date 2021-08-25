@@ -23,7 +23,7 @@ class Example(App):
         button1.text = "Button"
         button1.rounded = True
         button1.hover_colour = (100, 100, 100)
-        main_layout.add_widget(button1)
+        layout2.add_widget(button1)
 
         text1 = Text()
         text1.text = "This is a test to see if the refactor still allows this to work properly"

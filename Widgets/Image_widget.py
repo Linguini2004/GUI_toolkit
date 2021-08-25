@@ -1,5 +1,6 @@
 import pygame
 from pygame import *
+import time
 from Resources.Image_size import image_proportion
 
 class Image:
@@ -11,6 +12,9 @@ class Image:
         # dimension attributes:
         self.keep_proportion = True
         self.scale = 1
+        self.size_hint = [1, 1]
+        self.pos_hint = [0, 0]
+        self.compressible = True
 
         # header attributes:
         self.header_active = False
@@ -23,6 +27,8 @@ class Image:
 
         # private attributes:
         self._type = "image"
+        self._loaded = False
+        self._image_to_draw = None
         self._dimensions = [0, 0]
         self._position = [0, 0]
 
@@ -32,7 +38,7 @@ class Image:
 
         self._dimensions = dimensions
 
-    def assign_position(self, position):
+    def assign_position(self, position, *kargs):
         """The provided pos_hint is only advisory as certain layouts may align and place widgets in different ways
         Therefore the position is set by the layout object itself rather than the user or widget"""
 
@@ -42,7 +48,12 @@ class Image:
         surface.blit(font.render(self.header_text, True, self.header_colour), (self._position[0], self._position[1]))
     
     def draw(self, surface, pos):
-        image_to_draw = pygame.image.load(self.image_path)
+        if not self._loaded:
+            self._image_to_draw = pygame.image.load(self.image_path)
+            self._loaded = True
+
+        image_to_draw = self._image_to_draw
+
         width = image_to_draw.get_width()
         height = image_to_draw.get_height()
         

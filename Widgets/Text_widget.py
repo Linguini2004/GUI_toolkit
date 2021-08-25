@@ -14,6 +14,11 @@ class Text:
         self.align = 0
         # align must be 0, 1, 2 or 3
 
+        # dimension attributes:
+        self.pos_hint = [0, 0]
+        self.size_hint = [1, 1]
+        self.compressible = True
+
         # private attributes:
         self._type = "text"
         self._dimensions = [0, 0]
@@ -25,7 +30,7 @@ class Text:
 
         self._dimensions = dimensions
 
-    def assign_position(self, position):
+    def assign_position(self, position, *kargs):
         """The provided pos_hint is only advisory as certain layouts may align and place widgets in different ways
         Therefore the position is set by the layout object itself rather than the user or widget"""
 

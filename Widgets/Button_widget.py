@@ -27,7 +27,8 @@ class Button:
 
         # dimension attributes:
         self.size_hint = [1, 1]
-        self.pos_hint = ""
+        self.pos_hint = [0, 0]
+        self.compressible = True
         self.rounded = False
         self.radius = 0.1
 
@@ -60,7 +61,9 @@ class Button:
         self._pressed = False
         self._pressed_timeout = 20
         self._dimensions = [0, 0]
+        self._total_dimensions = [0, 0]
         self._position = [0, 0]
+        self._actual_position = [0, 0]
         self._action = None
         self._previous_image = None
         self._loaded_image = None
@@ -74,20 +77,34 @@ class Button:
         """The provided size_hint is only advisory as certain layouts may manipulate dimensions in different ways
         Therefore the dimensions are set by the layout object itself rather than the user or widget"""
 
-        self._dimensions = dimensions
+        self._dimensions = list(dimensions)
 
-    def assign_position(self, position):
+        self._total_dimensions = list(dimensions)
+        self._dimensions[0] = self._dimensions[0]# * self.size_hint[0]
+        self._dimensions[1] = self._dimensions[1]# * self.size_hint[1]
+
+    def assign_position(self, position, actual_position):
         """The provided pos_hint is only advisory as certain layouts may align and place widgets in different ways
         Therefore the position is set by the layout object itself rather than the user or widget"""
 
-        self._position = position
+        self._position = list(position)
+
+        available_width = self._total_dimensions[0] - self._dimensions[0]
+        available_height = self._total_dimensions[1] - self._dimensions[1]
+        self._position[0] += (self.pos_hint[0] * available_width)
+        self._position[1] += (self.pos_hint[1] * available_height)
+
+        self._actual_position = list(actual_position)
+
+        self._actual_position[0] += (self.pos_hint[0] * available_width)
+        self._actual_position[1] += (self.pos_hint[1] * available_height)
 
     def _mouse_over(self, pos):
         """This requires the position of the mouse which can be accessed through pygame. This will be provided by
         the draw or mouse_click methods which will in turn receive it from the app.py program"""
 
-        if self._position[0] < pos[0] < (self._position[0] + self._dimensions[0]):
-            if self._position[1] < pos[1] < (self._position[1] + self._dimensions[1]):
+        if self._actual_position[0] < pos[0] < (self._actual_position[0] + self._dimensions[0]):
+            if self._actual_position[1] < pos[1] < (self._actual_position[1] + self._dimensions[1]):
                 self._hover = True
             else:
                 self._hover = False
@@ -106,10 +123,10 @@ class Button:
     def _load_icon(self):
         while True:
             os.chdir(os.path.dirname(os.getcwd()))
-            if "GUI_toolkit" in os.getcwd()[12:]:
+            if "GUI_toolkit" in os.getcwd()[-12:]:
                 break
-            else:
-                os.chdir(os.path.dirname(os.getcwd()))
+            #else:
+            #    os.chdir(os.path.dirname(os.getcwd()))
 
         if self.icon_name != "":
             found = False
@@ -292,4 +309,4 @@ class Button:
         if self._action is not None:
             self._action(self, *self._action_args)
         else:
-            print("NoActionBound")
+            print("No action bound")

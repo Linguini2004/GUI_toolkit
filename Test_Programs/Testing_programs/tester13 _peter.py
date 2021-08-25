@@ -17,7 +17,7 @@ class Example(App):
         image_layout.background_colour = (200, 200, 200)
 
         image1 = Image()
-        image1.image_path = "C:/Users/david/Documents/other_documents/pyhton/GUI_toolkit/Test_Programs/boring_logo.png"
+        image1.image_path = "/Test_Programs/boring_logo.png"
         image_layout.add_widget(image1)
         main_layout[image_layout] = 0.45
 
