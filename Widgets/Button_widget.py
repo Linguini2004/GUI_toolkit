@@ -275,8 +275,9 @@ class Button:
 
         surface.blit(b_text, (x_coord, y_coord))
 
-    def draw(self, surface, pos):
+    def draw(self, surface, pos, scroll_dif):
         """Surface is the window on which the widget will be drawn and is defined by the app.py program"""
+        pos[1] -= scroll_dif
         self._mouse_over(pos)
 
         if self._pressed and self._pressed_timeout > 0:

@@ -52,7 +52,7 @@ class Image:
     def _draw_header(self, surface, font):
         surface.blit(font.render(self.header_text, True, self.header_colour), (self._position[0], self._position[1]))
     
-    def draw(self, surface, pos):
+    def draw(self, surface, *kargs):
         if not self._loaded:
             self._image_to_draw = pygame.image.load(self.image_path)
             self._loaded = True

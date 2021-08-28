@@ -13,7 +13,7 @@ class BoxLayout:
         self.widget_spacing = 0.025
         self.scroll_enabled = False
         self.merge_scroll = False
-        self.scroll_speed = 10
+        self.scroll_speed = 8
         self.padding = [0, 0, 0, 0]
         # padding = [header, footer, left_margin, right_margin] must be 0 to 1
         self.real_size = 1
@@ -174,7 +174,7 @@ class BoxLayout:
 
     def _draw_widgets(self, mouse_pos):
         for widget in self._widgets:
-            widget.draw(self._intermediate, mouse_pos)
+            widget.draw(self._intermediate, list(mouse_pos), self._scroll_amount)
 
     def _draw_self(self, surface):
         surface.blit(self._intermediate, (self._position[0], self._position[1] + self._scroll_amount))

@@ -38,7 +38,7 @@ class Text:
 
         self._position = position
 
-    def draw(self, surface, pos):
+    def draw(self, surface, *kargs):
         if not self._text_loaded:
             text = self.text
             color = self.text_colour

@@ -200,7 +200,8 @@ class Text_Input:
 
         return (bkg_box, hover_box, active_box, pos)
 
-    def draw(self, surface, pos):
+    def draw(self, surface, pos, scroll_dif):
+        pos[1] -= scroll_dif
         self._mouse_over(pos)
         padding = self._act_padding
 

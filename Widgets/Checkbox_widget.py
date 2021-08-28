@@ -50,6 +50,7 @@ class CheckBox:
         self._loaded_pos = None
         self._loaded_header = None
         self._boxes_loaded = False
+        self._box_rect = [0, 0, 0, 0]
         self._cwd = os.getcwd()
 
     def assign_dimensions(self, dimensions):
@@ -69,8 +70,8 @@ class CheckBox:
         """This requires the position of the mouse which can be accessed through pygame. This will be provided by
         the draw or mouse_click methods which will in turn receive it from the app.py program"""
 
-        if self._actual_position[0] < pos[0] < (self._actual_position[0] + self._dimensions[0]):
-            if self._actual_position[1] < pos[1] < (self._actual_position[1] + self._dimensions[1]):
+        if self._actual_position[0] + self._box_rect[0] < pos[0] < (self._actual_position[0] + self._box_rect[0] + self._box_rect[2]):
+            if self._actual_position[1] + self._box_rect[1] < pos[1] < (self._actual_position[1] + self._box_rect[1] + self._box_rect[3]):
                 self._hover = True
             else:
                 self._hover = False
@@ -179,8 +180,9 @@ class CheckBox:
 
 
 
-    def draw(self, surface, pos):
+    def draw(self, surface, pos, scroll_dif):
         """Surface is the window on which the widget will be drawn and is defined by the app.py program"""
+        pos[1] -= scroll_dif
         self._mouse_over(pos)
         box_position = list(self._position)
 
@@ -223,6 +225,7 @@ class CheckBox:
                               box_dimensions[0] - (self.border_thickness * 2),
                               box_dimensions[1] - (self.border_thickness * 2)])
 
+            self._box_rect = [box_position[0] - self._position[0], box_position[1] - self._position[1], box_dimensions[0], box_dimensions[1]]
         else:
             if not self._boxes_loaded:
                 curved_border, border_pos = curve_shape(self.radius,
@@ -235,6 +238,7 @@ class CheckBox:
                                            box_dimensions[0] - (self.border_thickness * 2),
                                            box_dimensions[1] - (self.border_thickness * 2)], self.colour)
 
+                self._box_rect = [box_position[0] - self._position[0], box_position[1] - self._position[1], box_dimensions[0], box_dimensions[1]]
                 self._loaded_boxes = (box, curved_border)
                 self._loaded_pos = (box_pos, border_pos)
                 self._boxes_loaded = True

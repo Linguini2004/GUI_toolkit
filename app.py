@@ -181,7 +181,7 @@ class App:
             widgets += layout.provide_widgets()
 
         while self._running:
-            #print("fps:", clock.get_fps())
+            print("fps:", clock.get_fps())
             clock.tick(60)
             if scroll_list != []:
                 self._assign_layout_params(main_layout)
@@ -199,13 +199,14 @@ class App:
                         for layout in scroll_list:
                             layout.scroll(event.button)
 
-                    for widget in widgets:
-                        if widget._type in ["button", "text_input", "checkbox"]:
-                            if widget.mouse_click():
-                                try:
-                                    widget.action()
-                                except AttributeError:
-                                    pass
+                    else:
+                        for widget in widgets:
+                            if widget._type in ["button", "text_input", "checkbox"]:
+                                if widget.mouse_click():
+                                    try:
+                                        widget.action()
+                                    except AttributeError:
+                                        pass
 
                 if event.type == KEYDOWN:
                     for widget in widgets:
