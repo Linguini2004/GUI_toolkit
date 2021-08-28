@@ -31,6 +31,11 @@ class Image:
         self._image_to_draw = None
         self._dimensions = [0, 0]
         self._position = [0, 0]
+        self._loaded_header = None
+        self._loaded_image = None
+        self._loaded_dim = [0, 0]
+        self._loaded_pos = [0, 0]
+        self._rect_loaded = False
 
     def assign_dimensions(self, dimensions):
         """The provided size_hint is only advisory as certain layouts may manipulate dimensions in different ways
@@ -64,19 +69,28 @@ class Image:
         spacing = self.header_spacing * self._dimensions[1]
         
         if self.header_active:
-            if self.header_align == "top":
-                image_position[1] += font.render("H", False, self.header_colour).get_height() + spacing
-                image_dimensions[1] -= font.render("H", False, self.header_colour).get_height() + spacing
-            elif self.header_align == "left":
-
-                image_position[0] += (font.render(self.header_text, False, self.header_colour).get_width() + spacing)
-                image_dimensions[0] -= (font.render(self.header_text, False, self.header_colour).get_width() + spacing)
+            if not self._rect_loaded:
+                if self.header_align == "top":
+                    image_position[1] += font.render("H", False, self.header_colour).get_height() + spacing
+                    self._loaded_pos = image_position
+                    image_dimensions[1] -= font.render("H", False, self.header_colour).get_height() + spacing
+                    self._loaded_dim = image_dimensions
+                elif self.header_align == "left":
+                    image_position[0] += (font.render(self.header_text, False, self.header_colour).get_width() + spacing)
+                    self._loaded_pos = image_position
+                    image_dimensions[0] -= (font.render(self.header_text, False, self.header_colour).get_width() + spacing)
+                    self._loaded_dim = image_dimensions
+                self._rect_loaded = True
+        else:
+            self._loaded_dim = image_dimensions
+            self._loaded_pos = image_position
 
         self._draw_header(surface, font)
 
-        if self.keep_proportion:
-            image_to_draw = image_proportion(width, height, image_dimensions, image_to_draw, self.scale)
-        else:
-            image_to_draw = pygame.transform.smoothscale(image_to_draw, (int(image_dimensions[0]), int(image_dimensions[1])))
+        if self._loaded_image is None:
+            if self.keep_proportion:
+                self._loaded_image = image_proportion(width, height, self._loaded_dim, image_to_draw, self.scale)
+            else:
+                self._loaded_image = pygame.transform.smoothscale(image_to_draw, (int(self._loaded_dim[0]), int(self._loaded_dim[1])))
 
-        surface.blit(image_to_draw, (image_position[0], image_position[1]))
+        surface.blit(self._loaded_image, (self._loaded_pos[0], self._loaded_pos[1]))

@@ -4,11 +4,12 @@ from Widgets.Button_widget import Button
 from Widgets.Text_Input import Text_Input
 from Widgets.Text_widget import Text
 from Widgets.Image_widget import Image
+from Widgets.Checkbox_widget import CheckBox
 
 def create_top_layout():
     top_layout = BoxLayout()
     top_layout.mode = "vertical"
-    top_layout.background_colour = (238, 245, 219)
+    top_layout.background_colour = (240, 240, 240)
     top_layout.scroll_enabled = True
     top_layout.real_size = 1.5
     top_layout.padding = [0, 0, 0, 0]
@@ -24,7 +25,7 @@ def create_top_layout():
     username.rounded = True
     username.radius = 0.3
     username.padding = [0.1, 0.1, 0.05, 0.05]
-    username.size_hint = [1, 0.5]
+    username.size_hint = [1, 0.6]
     # header:
     username.header_active = True
     username.header_align = "top"
@@ -45,7 +46,7 @@ def create_top_layout():
     password.rounded = True
     password.radius = 0.3
     password.padding = [0.1, 0.1, 0.05, 0.05]
-    password.size_hint = [1, 0.5]
+    password.size_hint = [1, 0.6]
     password.compressible = True
     # header:
     password.header_active = True
@@ -62,8 +63,8 @@ def create_top_layout():
     # box config:
     enter_button.colour = (216, 216, 216)
     enter_button.hover_colour = (158, 158, 159)
-    enter_button.size_hint = [0.3, 0.3]
-    enter_button.pos_hint = [1, 0.1]
+    enter_button.size_hint = [0.5, 0.5]
+    enter_button.pos_hint = [0.5, 0.5]
     enter_button.rounded = True
     enter_button.radius = 0.3
     # text and icon:
@@ -78,11 +79,31 @@ def create_top_layout():
     enter_button.icon_scale = 0.5
     top_layout.add_widget(enter_button)
 
+    tcs = CheckBox()
+    tcs.header_active = True
+    tcs.header_text = "Accept terms and conditions:"
+    tcs.header_orientation = "left"
+    tcs.header_align = "center"
+    tcs.header_colour = (79, 99, 103)
+    tcs.colour = (240, 240, 240)
+    tcs.icon_type = "tick"
+    tcs.border_thickness = 2
+    tcs.box_size = 0.3
+    tcs.rounded = True
+    tcs.radius = 0.3
+    tcs.size_hint = [1, 0.5]
+    tcs.pos_hint = [0, 0]
+    tcs.compressible = True
+    tcs.box_align = "right"
+    tcs.header_spacing = 0.01
+    top_layout.add_widget(tcs)
+
     text = Text()
-    text.text = "By pressing confirm you agree to out Terms and Conditions. The full terms and conditions can be" \
-                "viewed on our website at www.rickroll.com."
+    text.text = "By ticking above you agree to out Terms and Conditions. The full terms and conditions can be" \
+                " viewed on our website at www.rickroll.com."
     text.align = "left"
     text.text_colour = (79, 99, 103)
+    #text.text_colour = (255, 255, 255)
     top_layout.add_widget(text)
 
     image1 = Image()
@@ -168,6 +189,7 @@ class Showcase(App):
         top_layout = create_top_layout()
         bottom_layout = create_bottom_layout()
 
+        #return top_layout
         return {top_layout: 0.9, bottom_layout: 0.1}
 
 if __name__ == "__main__":

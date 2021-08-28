@@ -1,5 +1,6 @@
 import pygame
 from pygame import *
+import time
 
 def curve_shape(radius, rect_dimensions, draw_color):
     color = Color(*draw_color)

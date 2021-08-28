@@ -1,7 +1,7 @@
 # This is one of the widgets
 # This widget simply blits text onto the screen
 import pygame
-from Resources.Wrap_text import wrap_text
+from Resources.Wrap_text import static_wrap_text as wrap_text
 from pygame import *
 
 class Text:
@@ -23,6 +23,8 @@ class Text:
         self._type = "text"
         self._dimensions = [0, 0]
         self. _position = [0, 0]
+        self._text_loaded = False
+        self._loaded_text = None
 
     def assign_dimensions(self, dimensions):
         """The provided size_hint is only advisory as certain layouts may manipulate dimensions in different ways
@@ -37,11 +39,18 @@ class Text:
         self._position = position
 
     def draw(self, surface, pos):
-        text = self.text
-        color = self.text_colour
-        rect = [self._position[0], self._position[1], self._dimensions[0], self._position[1]]
-        font = pygame.font.SysFont(self.font, self.font_size)
-        align = self.align
+        if not self._text_loaded:
+            text = self.text
+            color = self.text_colour
+            rect = [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]]
+            font = pygame.font.SysFont(self.font, self.font_size)
+            align = self.align
 
-        wrap_text(surface, text, color, rect, font, align)
+            text_dict = wrap_text(text, color, rect, font, align)
+            self._loaded_text = text_dict
+            self._text_loaded = True
+
+        text_dict = self._loaded_text
+        for word, pos in text_dict.items():
+            surface.blit(word, pos)
 

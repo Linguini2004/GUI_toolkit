@@ -1,5 +1,5 @@
 # This is one of the widgets
-# This is a simple button which initiates a response when clicked
+# This is a button which initiates a response when clicked
 # Eventually you will be able to modify all aspects of the button such as image and texture
 import pygame
 import os
@@ -8,6 +8,7 @@ from Resources.Image_size import adaptive_image_proportion
 from Resources.Image_size import image_proportion
 #from Resources.Errors import PaddingError, Icon_Error
 from Resources.Errors import *
+import time
 
 class Button:
     def __init__(self):
@@ -67,10 +68,12 @@ class Button:
         self._action = None
         self._previous_image = None
         self._loaded_image = None
-        self._image_loaded = False
         self._loaded_icon = None
-        self._icon_loaded = False
+        self._loaded_buttons = None
+        self._button_position = None
         self._action_args = None
+        self._button_text = None
+        self._text_loaded = False
         self._cwd = os.getcwd()
 
     def assign_dimensions(self, dimensions):
@@ -79,18 +82,25 @@ class Button:
 
         self._dimensions = list(dimensions)
 
+        '''
         self._total_dimensions = list(dimensions)
-        self._dimensions[0] = self._dimensions[0]# * self.size_hint[0]
-        self._dimensions[1] = self._dimensions[1]# * self.size_hint[1]
+        #self._dimensions[0] = self._dimensions[0]# * self.size_hint[0]
+        #self._dimensions[1] = self._dimensions[1]# * self.size_hint[1]
+        '''
 
     def assign_position(self, position, actual_position):
         """The provided pos_hint is only advisory as certain layouts may align and place widgets in different ways
         Therefore the position is set by the layout object itself rather than the user or widget"""
 
         self._position = list(position)
+        self._actual_position = list(actual_position)
+
+        '''
+        self._position = list(position)
 
         available_width = self._total_dimensions[0] - self._dimensions[0]
         available_height = self._total_dimensions[1] - self._dimensions[1]
+        print("AVAILABLE", available_width, available_height)
         self._position[0] += (self.pos_hint[0] * available_width)
         self._position[1] += (self.pos_hint[1] * available_height)
 
@@ -98,6 +108,7 @@ class Button:
 
         self._actual_position[0] += (self.pos_hint[0] * available_width)
         self._actual_position[1] += (self.pos_hint[1] * available_height)
+        '''
 
     def _mouse_over(self, pos):
         """This requires the position of the mouse which can be accessed through pygame. This will be provided by
@@ -111,7 +122,7 @@ class Button:
         else:
             self._hover = False
 
-    def mouse_click(self, pos):
+    def mouse_click(self):
         if self._hover:
             self._pressed = True
             return True
@@ -154,9 +165,8 @@ class Button:
         return icon_to_draw
 
     def _draw_icon(self, surface):
-        if not self._icon_loaded:
+        if self._loaded_icon is None:
             self._loaded_icon = self._load_icon()
-            self._icon_loaded = True
 
         icon_to_draw = self._loaded_icon
         icon_position = list(self._position)
@@ -197,9 +207,8 @@ class Button:
 
         self._previous_image = self.image_path
 
-        if not self._image_loaded:
+        if self._loaded_image is None:
             self._loaded_image = self._load_image()
-            self._image_loaded = True
 
         image_to_draw = self._loaded_image
 
@@ -243,13 +252,17 @@ class Button:
     def _draw_text(self, surface, text_align, position, dimensions):
         spacing = self.text_spacing * dimensions[0]
 
-        while True:
-            font = pygame.font.SysFont(self.font, self.font_size)
-            b_text = font.render(self.text, True, self.text_colour)
-            if (spacing * 2) + b_text.get_width() > dimensions[0]:
-                self.font_size -= 1
-            else:
-                break
+        if self._button_text is None:
+            while True:
+                font = pygame.font.SysFont(self.font, self.font_size)
+                b_text = font.render(self.text, True, self.text_colour)
+                if (spacing * 2) + b_text.get_width() > dimensions[0]:
+                    self.font_size -= 1
+                else:
+                    self._button_text = b_text
+                    break
+
+        b_text = self._button_text
 
         if text_align == "left":
             x_coord = position[0] + spacing
@@ -284,8 +297,19 @@ class Button:
                                  [self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]]
                                  )
             else:
-                curved_rectangle, pos = curve_shape(self.radius, (self._position[0], self._position[1], self._dimensions[0], self._dimensions[1]), draw_colour)
-                surface.blit(curved_rectangle, pos)
+                if self._loaded_buttons is None:
+                    default_button, hover_button, pressed_button, button_pos = self.load_curved_buttons(
+                        self.radius, (self._position[0], self._position[1], self._dimensions[0], self._dimensions[1])
+                    )
+                    self._loaded_buttons = (default_button, hover_button, pressed_button)
+                    self._button_position = button_pos
+
+                if self._pressed:
+                    surface.blit(self._loaded_buttons[2], self._button_position)
+                elif self._hover:
+                    surface.blit(self._loaded_buttons[1], self._button_position)
+                else:
+                    surface.blit(self._loaded_buttons[0], self._button_position)
 
         if self.text != "" and self.display_image:
             raise Button_Error("You cannot currently display an image and text within a button")
@@ -300,6 +324,13 @@ class Button:
             self._draw_icon(surface)
         elif self.text != "":
             self._draw_text(surface, self.text_align, self._position, self._dimensions)
+
+    def load_curved_buttons(self, radius, rect_dimensions):
+        default_button, pos = curve_shape(radius, rect_dimensions, self.colour)
+        hover_button, pos = curve_shape(radius, rect_dimensions, self.hover_colour)
+        pressed_button, pos = curve_shape(radius, rect_dimensions, self.pressed_colour)
+
+        return (default_button, hover_button, pressed_button, pos)
 
     def bind(self, function, *args):
         self._action = function

@@ -60,10 +60,8 @@ class App:
                         height_list.append(self.screen_height / len(column))
                     for i, column in enumerate(main_layout):
                         for n, layout in enumerate(column):
-                            #layout.draw_background(self._screen)
                             layout.assign_dimensions((layout_width, height_list[i]))
                             layout.assign_position((i * layout_width, n * height_list[i]))
-                            #layout.assign_position((0, 0))
                             layout_surface_positions.append((i * layout_width, n * height_list[i]))
                             layout_surfaces.append(pygame.surface.Surface((layout_width, height_list[i])))
 
@@ -75,10 +73,8 @@ class App:
                             height_list[i].append(self.screen_height * layout_height)
                     for i, column in enumerate(main_layout):
                         for n, layout in enumerate(column[0].keys()):
-                            #layout.draw_background(self._screen)
                             layout.assign_dimensions((width_list[i], height_list[i][n]))
                             layout.assign_position((sum(width_list[:i]), n * sum(height_list[i][:n])))
-                            #layout.assign_position((0, 0))
                             layout_surface_positions.append((sum(width_list[:i]), n * sum(height_list[i][:n])))
                             layout_surfaces.append(pygame.surface.Surface((width_list[i], height_list[i][n])))
 
@@ -90,10 +86,8 @@ class App:
                         height_list[i].append(self.screen_height * layout_height)
                 for i, column in enumerate(main_layout):
                     for n, layout in enumerate(column.keys()):
-                        #layout.draw_background(self._screen)
                         layout.assign_dimensions((layout_width, height_list[i][n]))
                         layout.assign_position((i * layout_width, n * sum(height_list[i][:n])))
-                        #layout.assign_position((0, 0))
                         layout_surface_positions.append((i * layout_width, n * sum(height_list[i][:n])))
                         layout_surfaces.append(pygame.surface.Surface((layout_width, height_list[i][n])))
 
@@ -101,10 +95,8 @@ class App:
                 layout_width = self.screen_width
                 layout_height = self.screen_height / len(main_layout)
                 for i, layout in enumerate(main_layout):
-                    #layout.draw_background(self._screen)
                     layout.assign_dimensions((layout_width, layout_height))
                     layout.assign_position((0, i * layout_height))
-                    #layout.assign_position((0, 0))
                     layout_surface_positions.append((0, i * layout_height))
                     layout_surfaces.append(pygame.surface.Surface((layout_width, layout_height)))
 
@@ -116,7 +108,6 @@ class App:
 
             for i, (layout, size) in enumerate(main_layout.items()):
                 layout.assign_dimensions((layout_width, layout_heights[i]))
-                #layout.assign_position((0, 0))
                 layout.assign_position((0, sum(layout_heights[:i])))
                 layout_surface_positions.append((0, sum(layout_heights[:i])))
                 layout_surfaces.append(pygame.surface.Surface((layout_width, layout_heights[i])))
@@ -191,7 +182,7 @@ class App:
 
         while self._running:
             #print("fps:", clock.get_fps())
-            #clock.tick(1000)
+            clock.tick(60)
             if scroll_list != []:
                 self._assign_layout_params(main_layout)
 
@@ -209,8 +200,8 @@ class App:
                             layout.scroll(event.button)
 
                     for widget in widgets:
-                        if widget._type in ["button", "text_input"]:
-                            if widget.mouse_click(pygame.mouse.get_pos()):
+                        if widget._type in ["button", "text_input", "checkbox"]:
+                            if widget.mouse_click():
                                 try:
                                     widget.action()
                                 except AttributeError:
