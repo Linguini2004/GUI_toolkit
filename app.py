@@ -181,7 +181,7 @@ class App:
             widgets += layout.provide_widgets()
 
         while self._running:
-            print("fps:", clock.get_fps())
+            #print("fps:", clock.get_fps())
             clock.tick(60)
             if scroll_list != []:
                 self._assign_layout_params(main_layout)
@@ -197,9 +197,13 @@ class App:
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 4 or event.button == 5:
                         for layout in scroll_list:
-                            layout.scroll(event.button)
+                            if layout._active:
+                                layout.scroll(event.button)
 
                     else:
+                        for layout in layouts:
+                            layout.mouse_click(pygame.mouse.get_pos())
+
                         for widget in widgets:
                             if widget._type in ["button", "text_input", "checkbox"]:
                                 if widget.mouse_click():

@@ -36,6 +36,7 @@ class BoxLayout:
         self._scroll_amount = 0
         self._act_padding = [0, 0, 0, 0]
         self._scroll_progressions = 0
+        self._active = False
         self._widget_adjust = False
         self._widget_assigned = False
 
@@ -99,6 +100,16 @@ class BoxLayout:
             elif self._scroll_direction == 1 and self._scroll_amount < 0:
                 self._scroll_amount += self.scroll_speed
             self._scroll_progressions -= 1
+
+    def mouse_click(self, mouse_pos):
+        if self._actual_position[0] < mouse_pos[0] < self._actual_position[0] + self._dimensions[0]:
+            if self._actual_position[1] < mouse_pos[1] < self._actual_position[1] + self._dimensions[1]:
+                self._active = True
+            else:
+                self._active = False
+        else:
+            self._active = False
+
 
     def add_widget(self, widget: object):
         self._widgets.append(widget)

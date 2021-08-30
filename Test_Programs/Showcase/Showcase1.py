@@ -63,8 +63,8 @@ def create_top_layout():
     # box config:
     enter_button.colour = (216, 216, 216)
     enter_button.hover_colour = (158, 158, 159)
-    enter_button.size_hint = [0.5, 0.5]
-    enter_button.pos_hint = [0.5, 0.5]
+    enter_button.size_hint = [0.4, 0.4]
+    enter_button.pos_hint = [1, 0.3]
     enter_button.rounded = True
     enter_button.radius = 0.3
     # text and icon:
@@ -99,11 +99,10 @@ def create_top_layout():
     top_layout.add_widget(tcs)
 
     text = Text()
-    text.text = "By ticking above you agree to out Terms and Conditions. The full terms and conditions can be" \
-                " viewed on our website at www.rickroll.com."
+    text.text = "By ticking above you agree to our terms and conditions. The full terms and conditions can be" \
+                " viewed on our website at www.termsandconditoins.com."
     text.align = "left"
     text.text_colour = (79, 99, 103)
-    #text.text_colour = (255, 255, 255)
     top_layout.add_widget(text)
 
     image1 = Image()
