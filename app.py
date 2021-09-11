@@ -11,8 +11,71 @@ class App:
         self.screen_width = 400
         self.screen_height = 600
         self.title = "GUI"
+        self._main_layout = None
+        self._update = False
 
     def build(self):
+        return None
+
+    def remove_layout(self):
+        """This allows the user to remove a specific layout from the list or dictionary of layouts"""
+        return None
+
+    def replace_layout(self, old_layout, new_layout):
+        """This allows the user to replace one layout with another layout"""
+        self._update = True
+
+        for e, i in enumerate(self._layouts):
+            if i == old_layout:
+                self._layouts[e] = new_layout
+
+        main_layout = self._main_layout
+        print("main_layout", main_layout)
+
+        if type(main_layout) == list:
+            if type(main_layout[0]) == list:
+                if type(main_layout[0][0]) == list:
+                    for column in main_layout:
+                        for layout in column:
+                            if layout == old_layout:
+                                main_layout[main_layout.index(column)][column.index(layout)] = new_layout
+
+                elif type(main_layout[0][0]) == dict:
+                    for column in main_layout:
+                        for layout in column[0].keys():
+                            if layout == old_layout:
+                                main_layout[main_layout.index(column)][column[0].keys().index(layout)] = new_layout
+
+            elif type(main_layout[0]) == dict:
+                for column in main_layout:
+                    for layout in column.keys():
+                        if layout == old_layout:
+                            main_layout[main_layout.index(column)][column[0].keys().index(layout)] = new_layout
+
+            else:
+                for layout in main_layout:
+                    if layout == old_layout:
+                        main_layout[main_layout.index(layout)] = new_layout
+
+        elif type(main_layout) == dict:
+            for layout in main_layout:
+                if layout == old_layout:
+                    print("before", main_layout)
+                    #print("new", new_layout)
+                    main_layout[layout] = new_layout
+                    print("middle")
+                    main_layout[main_layout.index(layout)] = new_layout
+                    #main_layout[main_layout.index(layout)] = new_layout
+                    print("after", main_layout)
+
+        else:
+            if main_layout == old_layout:
+                main_layout = new_layout
+
+        self._main_layout = main_layout
+
+    def add_layout(self):
+        """This allows the user to add a layout to a position in the list or dictionary"""
         return None
 
     def _get_layouts(self, main_layout):
@@ -104,6 +167,8 @@ class App:
             layout_width = self.screen_width
             layout_heights = []
             for size in main_layout.values():
+                print(repr(size))
+                print(repr(self.screen_height))
                 layout_heights.append(size * self.screen_height)
 
             for i, (layout, size) in enumerate(main_layout.items()):
@@ -124,67 +189,37 @@ class App:
         for e, surface in enumerate(surface_layouts):
             self._screen.blit(surface, surface_positions[e])
 
-    def _scroll_layouts(self, main_layout):
-        scroll_list = []
-
-        if type(main_layout) == list:
-            if type(main_layout[0]) == list:
-                if type(main_layout[0][0]) == list:
-                    for column in main_layout:
-                        for e, layout in enumerate(column):
-                            if layout.scroll_enabled:
-                                scroll_list.append(layout)
-
-                elif type(main_layout[0][0]) == dict:
-                    for column in main_layout:
-                        for e, layout in enumerate(column[0].keys()):
-                            if layout.scroll_enabled:
-                                scroll_list.append(layout)
-
-
-            elif type(main_layout[0]) == dict:
-                for column in main_layout:
-                    for e, layout in enumerate(column.keys()):
-                        if layout.scroll_enabled:
-                            scroll_list.append(layout)
-
-            else:
-                for e, layout in enumerate(main_layout):
-                    if layout.scroll_enabled:
-                        scroll_list.append(layout)
-
-        elif type(main_layout) == dict:
-            for e, layout in enumerate(main_layout.keys()):
-                if layout.scroll_enabled:
-                    scroll_list.append(layout)
-
-        else:
-            if main_layout.scroll_enabled:
-                scroll_list.append(main_layout)
-
-        return scroll_list
-
     def run(self):
         pygame.init()
-        main_layout = self.build()
+        self._main_layout = self.build()
+        main_layout = self._main_layout
+
         pygame.display.set_caption(self.title)
         self._screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self._running = True
-        scroll_list = self._scroll_layouts(main_layout)
-        layouts = self._get_layouts(main_layout)
+        scroll_list = []
+        self._layouts = self._get_layouts(main_layout)
+        layouts = self._layouts
+
         widgets = []
         layout_surfaces, layout_positions = self._assign_layout_params(main_layout)
 
         clock = pygame.time.Clock()
 
         for layout in layouts:
+            if layout.scroll_enabled:
+                scroll_list.append(layout)
             widgets += layout.provide_widgets()
 
         while self._running:
             #print("fps:", clock.get_fps())
             clock.tick(60)
-            if scroll_list != []:
-                self._assign_layout_params(main_layout)
+            #if scroll_list != []:
+            #    self._assign_layout_params(self._main_layout)
+            if self._update:
+                layout_surfaces, layout_positions = self._assign_layout_params(main_layout)
+                layouts = self._get_layouts(self._main_layout)
+                self._update = False
 
             self._draw_layout_surfaces(layout_surfaces, layout_positions)
 
@@ -197,13 +232,10 @@ class App:
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 4 or event.button == 5:
                         for layout in scroll_list:
-                            if layout._active:
+                            if layout._mouse_over(pygame.mouse.get_pos()):
                                 layout.scroll(event.button)
 
                     else:
-                        for layout in layouts:
-                            layout.mouse_click(pygame.mouse.get_pos())
-
                         for widget in widgets:
                             if widget._type in ["button", "text_input", "checkbox"]:
                                 if widget.mouse_click():

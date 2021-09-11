@@ -6,7 +6,7 @@ from Widgets.Text_widget import Text
 from Widgets.Image_widget import Image
 from Widgets.Checkbox_widget import CheckBox
 
-def create_top_layout():
+def create_home_layout():
     top_layout = BoxLayout()
     top_layout.mode = "vertical"
     top_layout.background_colour = (240, 240, 240)
@@ -37,6 +37,7 @@ def create_top_layout():
     top_layout.add_widget(username)
 
     '''Creates the password text box and adds it to the top_layout'''
+
     password = Text_Input()
     # box config:
     password.background_colour = (216, 216, 216)
@@ -121,7 +122,7 @@ def create_top_layout():
 
     return top_layout
 
-def create_bottom_layout():
+def create_bottom_layout(app, home_layout, settings_layout):
     bottom_layout = BoxLayout()
     bottom_layout.mode = "horizontal"
     bottom_layout.background_colour = (158, 158, 158)
@@ -137,6 +138,7 @@ def create_bottom_layout():
     button1.icon_scale = 0.85
     button1.rounded = True
     button1.radius = 0.5
+    button1.bind(app.show_home_screen, home_layout, settings_layout)
     bottom_layout.add_widget(button1)
 
     button2 = Button()
@@ -177,6 +179,16 @@ def create_bottom_layout():
 
     return bottom_layout
 
+def create_settings_layout():
+    top_layout = BoxLayout()
+    top_layout.mode = "vertical"
+    top_layout.background_colour = (240, 240, 240)
+    top_layout.scroll_enabled = True
+    top_layout.real_size = 1.5
+    top_layout.padding = [0, 0, 0, 0]
+
+    return top_layout
+
 class Showcase(App):
     def build(self):
         self.screen_width = 400
@@ -185,11 +197,18 @@ class Showcase(App):
 
         screen = {}
 
-        top_layout = create_top_layout()
-        bottom_layout = create_bottom_layout()
+        home_layout = create_home_layout()
+        settings_layout = create_settings_layout()
+        bottom_layout = create_bottom_layout(self, home_layout, settings_layout)
 
         #return top_layout
-        return {top_layout: 0.9, bottom_layout: 0.1}
+        return {home_layout: 0.9, bottom_layout: 0.1}
+
+    def show_home_screen(self, button, home_layout, settings_layout):
+        self.replace_layout(home_layout, settings_layout)
+
+    def show_settings(self):
+        pass
 
 if __name__ == "__main__":
     application = Showcase()

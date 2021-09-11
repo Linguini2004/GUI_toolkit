@@ -17,7 +17,7 @@ class Example(App):
         button1.text = "B1"
         button1.colour = (100, 100, 100)
         button1.pressed_colour = (0, 255, 0)
-        button1.bind(self, "test_button")
+        button1.bind(self.test_button)
         button1.rounded = True
         main_layout.add_widget(button1)
 
@@ -44,9 +44,9 @@ class Example(App):
 
         return main_layout
 
-    def test_button(self, instance):
+    def test_button(self, button):
         print("Button 1 has been pressed")
-        print(instance.text)
+        print(button.text)
 
 if __name__ == "__main__":
     application = Example()

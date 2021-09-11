@@ -7,7 +7,7 @@ from Resources.Errors import *
 
 class BoxLayout:
     def __init__(self):
-        # config attributes
+        # config attributes:
         self.mode = "horizontal"
         self.background_colour = (0, 0, 0)
         self.widget_spacing = 0.025
@@ -27,18 +27,20 @@ class BoxLayout:
         self._widget_height = 0
         self._widget_coords = []
         self._widget_dimensions = []
-        self._dimensions = [400, 600]
+        self._dimensions = [0, 0]
         self._actual_position = []
         self._actual_widget_coords = []
         self._position = [0, 0]
         self._layout_width = 0
         self._layout_height = 0
-        self._scroll_amount = 0
         self._act_padding = [0, 0, 0, 0]
+        self._act_spacing = 0
         self._scroll_progressions = 0
-        self._active = False
+        self._scroll_direction = 0
+        self._scroll_amount = 0
         self._widget_adjust = False
         self._widget_assigned = False
+        self._intermediate = None
 
     def assign_dimensions(self, dimensions):
         """With the option of having multiple layouts on one screen, it must be the app.py 
@@ -90,9 +92,6 @@ class BoxLayout:
             self._scroll_progressions = 10
             self._scroll_direction = 1
 
-    def active(self, mouse_pos):
-        pass
-
     def _scroll_animation(self):
         if self._scroll_progressions > 0:
             if self._scroll_direction == -1 and self._scroll_amount > (self._layout_height - (self._layout_height / self.real_size)) * -1:
@@ -101,14 +100,14 @@ class BoxLayout:
                 self._scroll_amount += self.scroll_speed
             self._scroll_progressions -= 1
 
-    def mouse_click(self, mouse_pos):
+    def _mouse_over(self, mouse_pos):
         if self._actual_position[0] < mouse_pos[0] < self._actual_position[0] + self._dimensions[0]:
             if self._actual_position[1] < mouse_pos[1] < self._actual_position[1] + self._dimensions[1]:
-                self._active = True
+                return True
             else:
-                self._active = False
+                return False
         else:
-            self._active = False
+            return False
 
 
     def add_widget(self, widget: object):

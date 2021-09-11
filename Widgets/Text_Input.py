@@ -56,6 +56,7 @@ class Text_Input:
         self._bkg_positions = None
         self._header_size = None
         self._font = None
+        self._previous_text = ""
 
     def assign_dimensions(self, dimensions):
         """The provided size_hint is only advisory as certain layouts may manipulate dimensions in different ways
@@ -137,8 +138,10 @@ class Text_Input:
 
     def update(self, event):
         if self._active:
+            self._previous_text = self.text
             if event.key == K_BACKSPACE:
-                self.text = self.text.rstrip(self.text[-1])
+                if len(self.text) > 0:
+                    self.text = self.text.rstrip(self.text[-1])
             elif event.key == K_RETURN:
                 self.text += " ¦ "
             else:
@@ -148,7 +151,7 @@ class Text_Input:
         surface.blit(font.render(self.header_text, True, color), ((self._position[0]), self._position[1]))
 
     def _draw_default_text(self, surface, text, color, rect, font, align):
-        wrap_text(surface, text, color, rect, font, align)
+        wrap_text(surface, text, color, rect, font, align, False)
 
     def _draw_background(self, surface, modified_pos, modified_dim):
         if self._active:
@@ -238,6 +241,6 @@ class Text_Input:
         if self.default_text != "" and self.text == "":
             self._draw_default_text(surface, self.default_text, self.default_text_colour, rect, font, align)
 
-        wrap_text(surface, text, color, rect, font, align)
+        wrap_text(surface, text, color, rect, font, align, self._active)
 
 

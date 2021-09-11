@@ -2,11 +2,13 @@ import pygame
 from pygame import *
 import time
 
-def modifiable_wrap_text(surface, text, color, rect, font, align, aa=True, bkg=None):
+def modifiable_wrap_text(surface, text, color, rect, font, align, cursor=False, aa=True, bkg=None):
     textAlignLeft = 0
     textAlignRight = 1
     textAlignCenter = 2
     textAlignBlock = 3
+
+    full = False
 
     lineSpacing = -2
     spaceWidth, fontHeight = font.size(" ")[0], font.size("Tg")[1]
@@ -36,7 +38,7 @@ def modifiable_wrap_text(surface, text, color, rect, font, align, aa=True, bkg=N
 
     lineBottom = rect[1]
     lastLine = 0
-    for lineLen, lineImages in zip(lineLenList, lineList):
+    for line_num, (lineLen, lineImages) in enumerate(zip(lineLenList, lineList)):
         lineLeft = rect[0]
         if align == textAlignRight:
             lineLeft += + rect[2] - lineLen - spaceWidth * (len(lineImages) - 1)
@@ -45,18 +47,30 @@ def modifiable_wrap_text(surface, text, color, rect, font, align, aa=True, bkg=N
         elif align == textAlignBlock and len(lineImages) > 1:
             spaceWidth = (rect[2] - lineLen) // (len(lineImages) - 1)
         lastLine += 1
+
         for i, image in enumerate(lineImages):
             x, y = lineLeft + i * spaceWidth, lineBottom
-            surface.blit(image, (round(x), y))
+
+            if (lineBottom + fontHeight) - rect[1] < rect[3]:
+                surface.blit(image, (round(x), y))
+                if len(lineImages) == i + 1 and line_num + 1 == len(lineLenList) and time.time() % 1 > 0.5 and cursor and text != "":
+                    cursor = font.render("|", aa, color)
+                    surface.blit(cursor, (x + image.get_width(), lineBottom))
+
             lineLeft += image.get_width()
         lineBottom += fontHeight + lineSpacing
 
+    return full
+
+    '''
     if lastLine < len(lineList):
         drawWords = sum([len(lineList[i]) for i in range(lastLine)])
         remainingText = ""
         for text in listOfWords[drawWords:]: remainingText += text + " "
         return remainingText
-    return ""
+    return
+    
+    '''
 
 def static_wrap_text(text, color, rect, font, align, aa=True, bkg=None):
     textAlignLeft = 0
