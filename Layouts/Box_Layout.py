@@ -114,6 +114,10 @@ class BoxLayout:
         self._widgets.append(widget)
         self._num_widgets += 1
 
+    def reset_widgets(self):
+        self._widgets = []
+        self._num_widgets = 0
+
     def _align(self):
         self._widget_coords = []
         self._widget_dimensions = []

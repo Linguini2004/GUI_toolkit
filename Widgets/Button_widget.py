@@ -335,6 +335,7 @@ class Button:
 
     def bind(self, function, *args):
         self._action = function
+        print("function", function)
         self._action_args = args
 
     def action(self):
